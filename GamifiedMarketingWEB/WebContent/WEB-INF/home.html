@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Home</title>
+	</head>
+	<body>
+		<h1>Gamified Marketing Home Page</h1>
+		<p
+			th:text="${'Welcome back ' + session.user.username"></p>
+		<table>
+			<thead>
+				<tr>
+					<th>Image</th>
+					<th>Name</th>
+					<th>Questionnaire</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${product.image}"></td>
+					<td th:text="${product.name}"></td>
+					<td th:text="${questionnaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
