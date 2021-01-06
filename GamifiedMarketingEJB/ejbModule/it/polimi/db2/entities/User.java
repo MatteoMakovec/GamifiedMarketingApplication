@@ -13,24 +13,33 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	private int ID;
+	
 	private String username;
-
 	private String passwd;
 	private String email;
 	private String last_login;
 	
-	
+	/*
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "submitters", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<Questionnaire> questionnaires;
+	private List<Questionnaire> questionnaires;*/
 	
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "answerer", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Answer> answers;
 	
 
 	public User() {
 	}
+	
+	public int getID() {
+		return this.ID;
+	}
 
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
 	public String getUsername() {
 		return this.username;
 	}
@@ -63,7 +72,7 @@ public class User implements Serializable {
 		this.last_login = lastLogin;
 	}
 	
-
+/*
 	public List<Questionnaire> getQuestionnaires() {
 		return this.questionnaires;
 	}
@@ -76,14 +85,14 @@ public class User implements Serializable {
 	public void removeQuestionnaires(Questionnaire questionnaire) {
 		getQuestionnaires().remove(questionnaire);
 	}
-
+*/
 	public List<Answer> getAnswers() {
 		return this.answers;
 	}
 
 	public void addAnswer(Answer answer) {
 		getAnswers().add(answer);
-		answer.setAnswerer(this);
+		answer.setUser(this);
 	}
 
 	public void removeAnswer(Answer answer) {

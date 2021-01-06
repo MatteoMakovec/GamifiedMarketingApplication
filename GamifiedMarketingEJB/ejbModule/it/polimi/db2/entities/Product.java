@@ -11,6 +11,8 @@ public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	private int ID_product;
+	
 	private String p_name;
 
 	@Basic(fetch=FetchType.LAZY)
@@ -19,7 +21,15 @@ public class Product implements Serializable {
 
 	public Product() {
 	}
+	
+	public int getID() {
+		return this.ID_product;
+	}
 
+	public void setID(int ID_product) {
+		this.ID_product = ID_product;
+	}
+	
 	public String getName() {
 		return this.p_name;
 	}

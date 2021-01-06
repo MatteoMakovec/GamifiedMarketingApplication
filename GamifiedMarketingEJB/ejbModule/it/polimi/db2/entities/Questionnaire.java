@@ -17,15 +17,16 @@ public class Questionnaire implements Serializable {
 	
 	private String q_date;
 	
-
-	@OneToOne
-	private Product product;
-
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<User> submitters;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	@JoinColumn(name="questions")
+	@OneToOne
+	@JoinColumn(name="product_idx")
+	private Product product_idx;
+
+	/*
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	private List<User> submitters;*/
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Question> questions;
 
 
@@ -49,13 +50,13 @@ public class Questionnaire implements Serializable {
 	}
 	
 	public Product getProduct() {
-		return product;
+		return product_idx;
 	}
 	
 	public void setProduct(Product product) {
-		this.product = product;
+		this.product_idx = product;
 	}
-
+/*
 	public List<User> getSubmitters() {
 		return this.submitters;
 	}
@@ -67,7 +68,7 @@ public class Questionnaire implements Serializable {
 	public void removeSubmitter(User submitter) {
 		getSubmitters().remove(submitter);
 	}
-
+*/
 	public List<Question> getQuestion() {
 		return this.questions;
 	}

@@ -6,23 +6,9 @@
 	</head>
 	<body>
 		<h1>Gamified Marketing Home Page</h1>
-		<p
-			th:text="${'Welcome back ' + session.user.username"></p>
-		<table>
-			<thead>
-				<tr>
-					<th>Image</th>
-					<th>Name</th>
-					<th>Questionnaire</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td th:text="${product.image}"></td>
-					<td th:text="${product.name}"></td>
-					<td th:text="${questionnaire}"></td>
-				</tr>
-			</tbody>
-		</table>
+		<h3>Daily questionnaire</h3>
+		<p>Image: <p th:text="${product.image}"></p></p>
+		<p>Name: <p th:text="${product.name}"></p></p>
+		<p>Questionnaire: <p th:text="${questionnaire}"></p></p>
 	</body>
 </html>

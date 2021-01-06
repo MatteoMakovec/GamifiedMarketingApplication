@@ -15,13 +15,12 @@ public class Question implements Serializable {
 	
 	private String question;
 	private String q_type;
-	private int questionnaire_idx;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "answerTo", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Answer> answers;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private Questionnaire questionnaire;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })  //vorrei farlo appartenere ad Questionnaire, ma non mi lascia
+	private Questionnaire questionnaire_idx;
 
 	public Question() {
 	}
@@ -50,11 +49,11 @@ public class Question implements Serializable {
 		this.q_type = type;
 	}
 	
-	public int getQuestionnaire() {
+	public Questionnaire getQuestionnaire() {
 		return this.questionnaire_idx;
 	}
 	
-	public void setQuestionnaire(int questionnaire) {
+	public void setQuestionnaire(Questionnaire questionnaire) {
 		this.questionnaire_idx = questionnaire;
 	}
 	
@@ -64,15 +63,10 @@ public class Question implements Serializable {
 
 	public void add(Answer answer) {
 		getAnswer().add(answer);
-		answer.setAnswerTo(this);
+		answer.setQuestion(this);
 	}
 
 	public void removeAnswer(Answer answer) {
 		getAnswer().remove(answer);
-	}
-	
-	public void setQuestionnaire(Questionnaire questionnaireSet) {
-		questionnaire_idx = questionnaireSet.getID();
-		questionnaire = questionnaireSet;
 	}
 }

@@ -6,45 +6,42 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Answer", schema = "gamified_marketing")
-@IdClass(AnswerId.class)
 public class Answer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String username_idx;
+	@Column(name="ID_answer")
+	private int ID_answer;
 	
-	@Id
-	private int question_idx;
-
 	private String answer;
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "answerer")
-	private User answerer;
+	@JoinColumn(name = "user_idx")
+	private User user_idx;
 	
 	@ManyToOne
-	@JoinColumn(name = "answerTo")
-	private Question answerTo;
+	@JoinColumn(name = "question_idx")
+	private Question question_idx;
 	
 	
 	public Answer() {
 	}
 
-	public String getUsername() {
-		return this.username_idx;
+	public User getUser() {
+		return this.user_idx;
 	}
 
-	public void setUsername(String username) {
-		this.username_idx = username;
+	public void setUser(User user) {
+		this.user_idx = user;
 	}
 
-	public int getQuestion() {
+	public Question getQuestion() {
 		return this.question_idx;
 	}
 
-	public void setQuestion(int ID_question) {
-		this.question_idx = ID_question;
+	public void setQuestion(Question question) {
+		this.question_idx = question;
 	}
 
 	public String getAnswer() {
@@ -53,15 +50,5 @@ public class Answer implements Serializable {
 
 	public void setAnswer(String answer) {
 		this.answer = answer;
-	}
-	
-	public void setAnswerer(User answerer) {
-		username_idx = answerer.getUsername();
-		this.answerer = answerer;
-	}
-	
-	public void setAnswerTo(Question answerTo) {
-		question_idx = answerTo.getID();
-		this.answerTo = answerTo;
 	}
 }
