@@ -34,9 +34,9 @@ public class GoToHomePage extends HttpServlet {
 	private TemplateEngine templateEngine;
 	
 	@EJB(name = "it.polimi.db2.services/QuestionnaireService")
-	private QuestionnaireService qService;
+	private QuestionnaireService questionnaireService;
 	@EJB(name = "it.polimi.db2.services/ProductService")
-	private ProductService pService;
+	private ProductService productService;
 
 	public GoToHomePage() {
 		super();
@@ -60,15 +60,15 @@ public class GoToHomePage extends HttpServlet {
 			response.sendRedirect(loginpath);
 			return;
 		}
-
-		User user = (User) session.getAttribute("user");
+		
+		User user = (User) session.getAttribute("user");		// utile?
 		Questionnaire questionnaire = null;
 		Product product = null;
 		
 		try {
 			String date = new java.sql.Date(System.currentTimeMillis()).toString(); 
-			questionnaire = qService.findDailyQuestionnaire(date);
-			product = pService.getProduct(questionnaire.getProduct().getName());
+			questionnaire = questionnaireService.findDailyQuestionnaire(date);
+			product = productService.getProduct(questionnaire.getProduct().getName());
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
@@ -78,7 +78,7 @@ public class GoToHomePage extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("product", product);
-		ctx.setVariable("questionnaire", questionnaire.getID());
+		ctx.setVariable("questionnaire", "Questionnaire: "+questionnaire.getID());
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}
