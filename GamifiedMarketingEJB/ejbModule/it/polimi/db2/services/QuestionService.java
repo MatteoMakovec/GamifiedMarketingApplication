@@ -16,17 +16,12 @@ public class QuestionService {
 
 	public QuestionService() {
 	}
-
+	
 	public List<Question> findQuestions(int ID_questionnaire) {
 		List<Question> questions = null;
 		
 		try {
 			questions = em.createNamedQuery("Question.findQuestions", Question.class).setParameter("ID", ID_questionnaire).getResultList();
-			for(Question q : questions) {
-				if(q.getType().equals("Statistical")) {
-					questions.remove(q);
-				}
-			}
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not find the questions for this questionnaire");
 		}

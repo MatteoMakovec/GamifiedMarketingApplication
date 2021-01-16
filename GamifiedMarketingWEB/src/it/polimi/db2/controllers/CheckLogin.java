@@ -58,7 +58,12 @@ public class CheckLogin extends HttpServlet {
 			out.println("<p>Incorrect username or password</p>");
 		} else {
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/Home";
+			if (user.getType().equals("Admin")) {
+				path = getServletContext().getContextPath() + "/AdminPage";
+			}
+			else {
+				path = getServletContext().getContextPath() + "/Home";
+			}
 			response.sendRedirect(path);
 		}
 	}

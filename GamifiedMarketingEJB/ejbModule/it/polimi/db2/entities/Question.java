@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Question", schema = "gamified_marketing")
-@NamedQuery(name = "Question.findQuestions", query = "SELECT q FROM Question q  WHERE q.questionnaire_idx = :ID")
+@NamedQuery(name="Question.findQuestions", query="SELECT q FROM Question q WHERE q.questionnaire_idx.ID_questionnaire = :ID")
 public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -17,10 +17,12 @@ public class Question implements Serializable {
 	private String question;
 	private String q_type;
 	
+	/*
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<Answer> answers;
+	private List<Answer> answers;*/
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })  //vorrei farlo appartenere ad Questionnaire, ma non mi lascia
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@JoinColumn(name="questionnaire_idx")
 	private Questionnaire questionnaire_idx;
 
 	public Question() {
@@ -57,7 +59,7 @@ public class Question implements Serializable {
 	public void setQuestionnaire(Questionnaire questionnaire) {
 		this.questionnaire_idx = questionnaire;
 	}
-	
+	/*
 	public List<Answer> getAnswer() {
 		return this.answers;
 	}
@@ -69,5 +71,5 @@ public class Question implements Serializable {
 
 	public void removeAnswer(Answer answer) {
 		getAnswer().remove(answer);
-	}
+	}*/
 }

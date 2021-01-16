@@ -33,6 +33,11 @@ public class Questionnaire implements Serializable {
 	public Questionnaire() {
 	}
 	
+	public Questionnaire(String date, Product product) {
+		q_date = date;
+		product_idx = product;
+	}
+	
 	public int getID() {
 		return this.ID_questionnaire;
 	}
@@ -69,16 +74,16 @@ public class Questionnaire implements Serializable {
 		getSubmitters().remove(submitter);
 	}
 */
-	public List<Question> getQuestion() {
+	public List<Question> getQuestions() {
 		return this.questions;
 	}
 
 	public void add(Question question) {
-		getQuestion().add(question);
+		getQuestions().add(question);
 		question.setQuestionnaire(this);
 	}
 
 	public void removeQuestion(Question question) {
-		getQuestion().remove(question);
+		getQuestions().remove(question);
 	}
 }

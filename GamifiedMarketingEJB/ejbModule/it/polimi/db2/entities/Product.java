@@ -6,7 +6,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Product", schema = "gamified_marketing")
-@NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.p_name = :name")
+@NamedQueries({
+	@NamedQuery(name = "Product.getProduct", query = "SELECT p FROM Product p  WHERE p.p_name = :name"),
+	@NamedQuery(name = "Product.getProductID", query = "SELECT p FROM Product p  WHERE p.ID_product = :ID")
+})
+
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,6 +24,15 @@ public class Product implements Serializable {
 	
 
 	public Product() {
+	}
+	
+	public Product(String name) {
+		p_name = name;
+	}
+	
+	public Product(String name, byte[] img) {
+		p_name = name;
+		image = img;
 	}
 	
 	public int getID() {

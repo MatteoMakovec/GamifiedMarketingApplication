@@ -1,9 +1,7 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,20 +15,13 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.db2.entities.Question;
-import it.polimi.db2.services.QuestionService;
 
-
-
-@WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends HttpServlet {
+@WebServlet("/AdminPage")
+public class GoToAdminPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
-	
-	@EJB(name = "it.polimi.db2.services/QuestionService")
-	private QuestionService questionService;
 
-	public GoToQuestionnairePage() {
+	public GoToAdminPage() {
 		super();
 	}
 
@@ -52,26 +43,10 @@ public class GoToQuestionnairePage extends HttpServlet {
 			response.sendRedirect(loginpath);
 			return;
 		}
-		
-		List<Question> questions = null;
-		try {
-			questions = questionService.findQuestions((Integer) session.getAttribute("questionnaireID"));
-		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
-			return;
-		}
-		
-		int i = 0;
-		for (Question q : questions) {
-			session.setAttribute("question"+i, q);
-			i++;
-		}
-		session.setAttribute("#question", i+1);
-		
-		String path = "/WEB-INF/questionnaire.html";
+
+		String path = "/WEB-INF/adminPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("questions", questions);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

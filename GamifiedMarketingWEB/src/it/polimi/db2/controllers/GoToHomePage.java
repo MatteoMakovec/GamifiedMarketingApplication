@@ -1,8 +1,6 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -20,12 +18,8 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Questionnaire;
-import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionnaireService;
-
-import java.sql.Date;
-
 
 
 @WebServlet("/Home")
@@ -61,10 +55,8 @@ public class GoToHomePage extends HttpServlet {
 			return;
 		}
 		
-		User user = (User) session.getAttribute("user");		// utile?
 		Questionnaire questionnaire = null;
 		Product product = null;
-		
 		try {
 			String date = new java.sql.Date(System.currentTimeMillis()).toString(); 
 			questionnaire = questionnaireService.findDailyQuestionnaire(date);
@@ -73,7 +65,9 @@ public class GoToHomePage extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
-
+        
+		session.setAttribute("questionnaireID", questionnaire.getID());
+		
 		String path = "/WEB-INF/home.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());

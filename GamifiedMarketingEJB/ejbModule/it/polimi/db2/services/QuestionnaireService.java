@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
+import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Questionnaire;
 
 @Stateless
@@ -29,5 +30,11 @@ public class QuestionnaireService {
 			return null;
 		else 
 			return questionnaire;
+	}
+	
+	public void createQuestionnaire(String q_date, Product product){
+		Questionnaire questionnaire = new Questionnaire(q_date, product);
+		
+		em.persist(questionnaire);
 	}
 }

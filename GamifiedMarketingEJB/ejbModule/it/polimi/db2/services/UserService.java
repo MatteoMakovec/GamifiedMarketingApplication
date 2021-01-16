@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
+
 import it.polimi.db2.entities.User;
 import it.polimi.db2.exceptions.*;
 import java.util.List;
@@ -31,5 +32,11 @@ public class UserService {
 			return uList.get(0);
 		throw new NonUniqueResultException("More than one user registered with same credentials");
 
+	}
+	
+	public void createUser(String username, String password, String email) {
+		User user = new User(username, password, email);
+		
+		em.persist(user);
 	}
 }

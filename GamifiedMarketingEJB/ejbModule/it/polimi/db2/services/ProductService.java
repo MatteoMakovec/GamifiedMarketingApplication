@@ -28,4 +28,32 @@ public class ProductService {
 		else 
 			return product;
 	}
+	
+	public Product getProduct(int ID){
+		Product product = null;
+		try {
+			product = em.createNamedQuery("Product.getProductID", Product.class).setParameter("ID", ID)
+					.getSingleResult();
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Could not get the product");
+		}
+		
+		if (product == null)
+			return null;
+		else 
+			return product;
+	}
+	
+	public void createProduct(String name){
+		Product product = new Product(name);
+		
+		em.persist(product);
+	}
+	
+	
+	public void createProduct(String name, byte[] image){
+		Product product = new Product(name, image);
+		
+		em.persist(product);
+	}
 }

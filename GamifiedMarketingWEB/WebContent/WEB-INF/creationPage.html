@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Product and Questionnaire Insertion</title>
+	</head>
+	<body>
+		<h1>Creation Page</h1>
+		<h3>Insert a new product</h3>
+		<form action="CreateProduct" method="POST">
+			Product Name: <input type="text" id="productName" name="productName"><br>
+			Select image: <input type="file" name="imageUpload" value="file" id="imageUpload"><br>
+			<input type="submit" value="addProduct" id="createProduct" name="Create Product">
+		</form>
+		<br><br>
+		<h3>Do you want to create a new Questionnaire?</h3>
+		<form action="CreateQuestionnaire" method="POST">
+			Questionnaire date: <input type="text" id="questionnaireDate" name="questionnaireDate"><br>
+			Product ID: <input type="text" id="productID" name="productID"><br>
+			Number of question you want to add to the questionnaire: <input type="text" id="numberOfQuestions" name="numberOfQuestions"><br>
+			<input type="submit" value="addQuestionnaire" id="sendQuestions" name="Confirm">
+		</form>
+	</body>
+</html>

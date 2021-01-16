@@ -10,9 +10,9 @@
 	<h1>Welcome to the Gamified Marketing application</h1><br>
 	<h2>Please insert your credentials:</h2>
 	<form action="Subscribe" method="POST">
-		e-mail: <input type="text" name="username" required> <br>
 		Username: <input type="text" name="username" required> <br>
-		Password: <input type="password" name="pwd" required><br>
+		Password: <input type="password" name="passwd" required><br>
+		e-mail: <input type="text" name="email" required> <br>
 		<input type="submit" value="sign up">
 		<p th:text=" ${errorMsg}"></p>
 	</form>

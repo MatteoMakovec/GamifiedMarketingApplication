@@ -15,6 +15,11 @@ public class Answer implements Serializable {
 	
 	private String answer;
 	
+	public Answer (String answer, User user_idx, Question question_idx) {
+		this.answer = answer;
+		this.user_idx = user_idx;
+		this.question_idx = question_idx;
+	}
 	
 	@ManyToOne
 	@JoinColumn(name = "user_idx")

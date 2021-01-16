@@ -19,6 +19,7 @@ public class User implements Serializable {
 	private String passwd;
 	private String email;
 	private String last_login;
+	private String user_type;
 	
 	/*
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "submitters", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
@@ -29,7 +30,12 @@ public class User implements Serializable {
 	private List<Answer> answers;
 	
 
-	public User() {
+	public User() {}
+	
+	public User(String username, String password, String email) {
+		this.username = username;
+		this.passwd = password;
+		this.email = email;
 	}
 	
 	public int getID() {
@@ -62,6 +68,14 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getType() {
+		return this.user_type;
+	}
+
+	public void setType(String user_type) {
+		this.user_type = user_type;
 	}
 	
 	public String getLastLogin() {
