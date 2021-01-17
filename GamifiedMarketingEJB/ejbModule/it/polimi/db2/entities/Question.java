@@ -1,7 +1,6 @@
 package it.polimi.db2.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.*;
 

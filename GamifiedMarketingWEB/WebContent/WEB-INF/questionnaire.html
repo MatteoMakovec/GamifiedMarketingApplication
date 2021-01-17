@@ -7,20 +7,22 @@
 	<body>
 		<h1>Gamified Marketing Home Page</h1>
 		<h3>Questionnaire:</h3>
-		<table>
-			<thead>
-				<tr>
-					<th>Question</th>
-					<th>Answer</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="q : ${questions}">
-					<td th:text="${q.question}"></td>
-					<td><textarea class="answer" rows="4" cols="50" id="answer" name="answer"></textarea></td>
-				</tr>
-			</tbody>
-		</table>
-		<form action="SubmitAnswers" method="POST">	<input type="submit" th:value="Continue" id="continue" name="Continue"></form>
+		<form action="SubmitAnswers" method="POST">	
+			<table>
+				<thead>
+					<tr>
+						<th>Question</th>
+						<th>Answer</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="q : ${questions}">
+						<td th:text="${q.question}"></td>
+						<td><input type="text" id="answer" name="answer" value=""><br></td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="submit" th:value="Continue" id="continue" name="Continue">
+		</form>
 	</body>
 </html>

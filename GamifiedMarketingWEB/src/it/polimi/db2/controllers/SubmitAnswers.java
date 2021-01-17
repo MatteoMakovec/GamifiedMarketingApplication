@@ -21,7 +21,6 @@ import it.polimi.db2.entities.User;
 import it.polimi.db2.services.AnswerService;
 
 
-
 @WebServlet("/SubmitAnswers")
 public class SubmitAnswers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +28,7 @@ public class SubmitAnswers extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.services/AnswerService")
 	private AnswerService answerService;
-
+	
 	public SubmitAnswers() {
 		super();
 	}
@@ -53,13 +52,12 @@ public class SubmitAnswers extends HttpServlet {
 			return;
 		}
 		
+		String[] answers = request.getParameterValues("answer");
 		User user = (User) session.getAttribute("user");
 		
-		for(int i=0; i< (Integer)session.getAttribute("#question"); i++) {
-			answerService.reportAnswer((String) request.getAttribute("answer"), user, (Question) session.getAttribute("question"+i));
-			// il parametro riguardante la answer è sempre null, bisogna trovare un 
-			// metodo per riuscire a prenderla dalla pagina html
-		}
+		for(int i=0; i < answers.length; i++) {
+			 answerService.reportAnswer(answers[i], user, (Question) session.getAttribute("question"+i));
+		 }
 		
 		String path = "/WEB-INF/greetingsPage.html";
 		ServletContext servletContext = getServletContext();

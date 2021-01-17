@@ -8,11 +8,12 @@ import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 
+
 @Stateless
 public class AnswerService {
 	@PersistenceContext(unitName = "GamifiedMarketingApplication")
 	private EntityManager em;
-
+	
 	public AnswerService() {}
 	
 	public void reportAnswer(String answ, User user_idx, Question question_idx) {
