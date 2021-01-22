@@ -1,6 +1,8 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -44,7 +46,6 @@ public class SubmitAnswers extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 		String loginpath = getServletContext().getContextPath() + "/index.html";
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
@@ -52,12 +53,27 @@ public class SubmitAnswers extends HttpServlet {
 			return;
 		}
 		
-		String[] answers = request.getParameterValues("answer");
-		User user = (User) session.getAttribute("user");
+		String[] answers;
+		User user;
+		try {
+			answers = request.getParameterValues("answer");
+			user = (User) session.getAttribute("user");
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			return;
+		}
 		
-		for(int i=0; i < answers.length; i++) {
-			 answerService.reportAnswer(answers[i], user, (Question) session.getAttribute("question"+i));
-		 }
+		List<Question> questions = new ArrayList<>();
+		try {
+			for(int i=0; i < answers.length; i++) {
+				questions.add((Question) session.getAttribute("question"+i));
+			 }
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			return;
+		}
+		
+		answerService.reportAnswers(answers, user, questions);
 		
 		String path = "/WEB-INF/greetingsPage.html";
 		ServletContext servletContext = getServletContext();

@@ -25,8 +25,7 @@ public class Answer implements Serializable {
 	private Question question_idx;
 	
 	
-	public Answer() {
-	}
+	public Answer() {}
 	
 	public Answer(String answer, User usr, Question q) {
 		this.answer = answer;
