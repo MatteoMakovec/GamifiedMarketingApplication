@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
 import it.polimi.db2.entities.Question;
+import it.polimi.db2.entities.Questionnaire;
 
 @Stateless
 public class QuestionService {
@@ -30,5 +31,11 @@ public class QuestionService {
 			return null;
 		else 
 			return questions;
+	}
+	
+	public void submitQuestion(String quest, Questionnaire questionnaire) {
+		Question question = new Question(quest, questionnaire);
+		
+		em.persist(question);
 	}
 }

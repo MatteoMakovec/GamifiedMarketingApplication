@@ -11,6 +11,8 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="ID_question")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ID_question;
 	
 	private String question;
@@ -24,7 +26,12 @@ public class Question implements Serializable {
 	@JoinColumn(name="questionnaire_idx")
 	private Questionnaire questionnaire_idx;
 
-	public Question() {
+	public Question() {}
+	
+	public Question(String question, Questionnaire questionnaire) {
+		this.question = question;
+		this.questionnaire_idx = questionnaire;
+		q_type = "Marketing";
 	}
 	
 	public int getID() {

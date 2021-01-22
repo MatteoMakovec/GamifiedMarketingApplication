@@ -1,11 +1,15 @@
 package it.polimi.db2.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
 import it.polimi.db2.entities.Product;
+import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.Questionnaire;
 
 @Stateless
@@ -32,9 +36,31 @@ public class QuestionnaireService {
 			return questionnaire;
 	}
 	
-	public void createQuestionnaire(String q_date, Product product){
+	public void createQuestionnaire(String q_date, int productID, String[] questions){
+		Product product = em.find(Product.class, productID);
 		Questionnaire questionnaire = new Questionnaire(q_date, product);
 		
 		em.persist(questionnaire);
+		
+		for (int i=0; i<questions.length; i++) {
+			Question q = new Question(questions[i], questionnaire);
+			questionnaire.add(q);
+		}
+	}
+	
+	
+	public Questionnaire findQuestionnaire (String date, Product product) {
+		List<Questionnaire> questionnaires = new ArrayList<>();
+		
+		questionnaires = em.createNamedQuery("Questionnaire.findQuestionnaireDP", Questionnaire.class).setParameter("date", date).setParameter("product", product)
+				.getResultList();
+		
+		if(questionnaires.isEmpty()) {
+			return null;
+		}
+		else {
+			return questionnaires.get(questionnaires.size()-1);
+		}
+		
 	}
 }

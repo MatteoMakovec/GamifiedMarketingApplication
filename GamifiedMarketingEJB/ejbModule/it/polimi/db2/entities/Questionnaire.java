@@ -8,11 +8,19 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Questionnaire", schema = "gamified_marketing")
-@NamedQuery(name = "Questionnaire.findDailyQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date")
+@NamedQueries({
+	@NamedQuery(name = "Questionnaire.findDailyQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date"),
+	@NamedQuery(name = "Questionnaire.findQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.ID_questionnaire = :ID_questionnaire"),
+	@NamedQuery(name = "Questionnaire.findQuestionnaireDP", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date AND q.product_idx = :product")
+})
+
+
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="ID_questionnaire")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ID_questionnaire;
 	
 	private String q_date;
@@ -79,7 +87,7 @@ public class Questionnaire implements Serializable {
 	}
 
 	public void add(Question question) {
-		getQuestions().add(question);
+		questions.add(question);
 		question.setQuestionnaire(this);
 	}
 

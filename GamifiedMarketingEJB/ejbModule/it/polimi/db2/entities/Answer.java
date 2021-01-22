@@ -11,15 +11,10 @@ public class Answer implements Serializable {
 
 	@Id
 	@Column(name="ID_answer")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ID_answer;
 	
 	private String answer;
-	
-	public Answer (String answer, User user_idx, Question question_idx) {
-		this.answer = answer;
-		this.user_idx = user_idx;
-		this.question_idx = question_idx;
-	}
 	
 	@ManyToOne
 	@JoinColumn(name = "user_idx")
@@ -31,6 +26,12 @@ public class Answer implements Serializable {
 	
 	
 	public Answer() {
+	}
+	
+	public Answer(String answer, User usr, Question q) {
+		this.answer = answer;
+		this.user_idx = usr;
+		this.question_idx = q;
 	}
 
 	public User getUser() {

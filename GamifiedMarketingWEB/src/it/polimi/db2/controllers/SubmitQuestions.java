@@ -1,8 +1,6 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -13,30 +11,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.services.ProductService;
+import it.polimi.db2.services.QuestionService;
 import it.polimi.db2.services.QuestionnaireService;
 
-@WebServlet("/CreateQuestionnaire")
-public class CreateQuestionnaire extends HttpServlet {
+
+@WebServlet("/SubmitQuestions")
+public class SubmitQuestions extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	
-	@EJB(name = "it.polimi.db2.mission.services/QuestionnaireService")
+	@EJB(name = "it.polimi.db2.services/QuestionService")
+	private QuestionService questionService;
+	
+	@EJB(name = "it.polimi.db2.services/QuestionnaireService")
 	private QuestionnaireService questionnaireService;
 	
-	@EJB(name = "it.polimi.db2.mission.services/ProductService")
+	@EJB(name = "it.polimi.db2.services/ProductService")
 	private ProductService productService;
-
 	
-	public CreateQuestionnaire() {
+	public SubmitQuestions() {
 		super();
 	}
-
+	
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -46,35 +49,40 @@ public class CreateQuestionnaire extends HttpServlet {
 		templateResolver.setSuffix(".html");
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String loginpath = getServletContext().getContextPath() + "/index.html";
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
-			String loginpath = getServletContext().getContextPath() + "/index.html";
 			response.sendRedirect(loginpath);
 			return;
 		}
 		
-		int numberOfQuestions;
+		String questionnaireDate = null;
+		int productID;
+		String[] questions = request.getParameterValues("question");
 		try {
-			numberOfQuestions = Integer.parseInt(request.getParameter("numberOfQuestions"));
+			questionnaireDate = StringEscapeUtils.escapeJava(request.getParameter("questionnaireDate"));
+			productID = Integer.parseInt(request.getParameter("productID"));
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
 		}
 		
-		List<String> s = new ArrayList<>();			// Trovare un modo più elegante per farlo
-		for (int i=0; i<numberOfQuestions; i++) {
-			s.add("q");
-		}
+		questionnaireService.createQuestionnaire(questionnaireDate, productID, questions);
 		
-		String path = "/WEB-INF/addQuestions.html";
+		String path = "/WEB-INF/adminPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("numberOfQuestions", s);
-
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	public void destroy() {}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+	public void destroy() {
+	}
+
 }
