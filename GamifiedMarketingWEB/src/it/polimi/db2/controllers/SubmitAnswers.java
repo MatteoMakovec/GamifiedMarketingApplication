@@ -53,27 +53,21 @@ public class SubmitAnswers extends HttpServlet {
 			return;
 		}
 		
-		String[] answers;
-		User user;
-		try {
-			answers = request.getParameterValues("answer");
-			user = (User) session.getAttribute("user");
-		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
-			return;
-		}
+		String[] answers = request.getParameterValues("answer");
+		User user = (User) session.getAttribute("user");
 		
 		List<Question> questions = new ArrayList<>();
-		try {
-			for(int i=0; i < answers.length; i++) {
-				questions.add((Question) session.getAttribute("question"+i));
-			 }
-		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
-			return;
+		for (int i=0; i<(int)session.getAttribute("#question"); i++) {
+			questions.add((Question) session.getAttribute("question"+i));
 		}
 		
-		answerService.reportAnswers(answers, user, questions);
+		
+		if ((questions!=null)&&(answers!=null)) {
+			for (int i=0; i<answers.length; i++) {
+				answerService.reportAnswer(answers[i], user, questions.get(i));
+			}
+		}
+		
 		
 		String path = "/WEB-INF/greetingsPage.html";
 		ServletContext servletContext = getServletContext();
@@ -86,7 +80,5 @@ public class SubmitAnswers extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public void destroy() {
-	}
-
+	public void destroy() {}
 }

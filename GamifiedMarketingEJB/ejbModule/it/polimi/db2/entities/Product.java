@@ -22,7 +22,7 @@ public class Product implements Serializable {
 	private String p_name;
 
 	@Basic(fetch=FetchType.LAZY)
-	private byte[] image;
+	private byte[] image = new byte[4096];
 	
 
 	public Product() {

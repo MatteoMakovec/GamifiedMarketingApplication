@@ -1,6 +1,7 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -19,7 +20,6 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.services.QuestionService;
-
 
 
 @WebServlet("/Questionnaire")
@@ -53,9 +53,11 @@ public class GoToQuestionnairePage extends HttpServlet {
 			return;
 		}
 		
-		List<Question> questions = null;
+		int questionnaire;
+		List<Question> questions = new ArrayList<>();
 		try {
-			questions = questionService.findQuestions((Integer) session.getAttribute("questionnaireID"));
+			questionnaire = (int) session.getAttribute("questionnaireID");
+			questions = questionService.findQuestions(questionnaire);
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
@@ -72,6 +74,7 @@ public class GoToQuestionnairePage extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("questions", questions);
+		ctx.setVariable("questionnaire", "Questionnaire: "+questionnaire);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

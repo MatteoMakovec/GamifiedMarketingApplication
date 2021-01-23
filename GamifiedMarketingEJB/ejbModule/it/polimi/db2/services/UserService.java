@@ -39,4 +39,12 @@ public class UserService {
 		
 		em.persist(user);
 	}
+	
+	public void updateTimestamp(User u) throws Exception {
+		try {
+			em.merge(u);
+		} catch (Exception e) {
+			throw new Exception("Could not change profile");
+		}
+	}
 }

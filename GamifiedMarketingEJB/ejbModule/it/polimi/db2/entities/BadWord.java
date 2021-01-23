@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "BadWord", schema = "gamified_marketing")
+@NamedQuery(name = "BadWord.getAllWords", query = "SELECT w FROM BadWord w")
 public class BadWord implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

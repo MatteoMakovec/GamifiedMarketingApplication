@@ -14,7 +14,8 @@ public class Answer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ID_answer;
 	
-	private String answer;
+	@Column(name="answer")
+	private String answ;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_idx")
@@ -27,8 +28,8 @@ public class Answer implements Serializable {
 	
 	public Answer() {}
 	
-	public Answer(String answer, User usr, Question q) {
-		this.answer = answer;
+	public Answer(String answ, User usr, Question q) {
+		this.answ = answ;
 		this.user_idx = usr;
 		this.question_idx = q;
 	}
@@ -50,10 +51,10 @@ public class Answer implements Serializable {
 	}
 
 	public String getAnswer() {
-		return this.answer;
+		return this.answ;
 	}
 
 	public void setAnswer(String answer) {
-		this.answer = answer;
+		this.answ = answer;
 	}
 }

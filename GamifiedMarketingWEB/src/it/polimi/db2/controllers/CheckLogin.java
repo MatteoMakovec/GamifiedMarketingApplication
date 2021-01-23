@@ -2,6 +2,8 @@ package it.polimi.db2.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
@@ -58,6 +60,15 @@ public class CheckLogin extends HttpServlet {
 			out.println("<p>Incorrect username or password</p>");
 		} else {
 			request.getSession().setAttribute("user", user);
+			Date date = new Date(); 
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			user.setLastLogin(formatter.format(date));
+			try {
+				usrService.updateTimestamp(user);
+			} catch (Exception e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Timestamp update error");
+				return;
+			}
 			if (user.getType().equals("Admin")) {
 				path = getServletContext().getContextPath() + "/AdminPage";
 			}

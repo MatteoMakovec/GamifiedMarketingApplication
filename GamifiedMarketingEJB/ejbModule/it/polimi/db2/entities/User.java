@@ -27,9 +27,9 @@ public class User implements Serializable {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "submitters", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Questionnaire> questionnaires;*/
 	
-	
+	/*
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<Answer> answers;
+	private List<Answer> answers;*/
 	
 
 	public User() {}
@@ -101,7 +101,7 @@ public class User implements Serializable {
 	public void removeQuestionnaires(Questionnaire questionnaire) {
 		getQuestionnaires().remove(questionnaire);
 	}
-*/
+
 	public List<Answer> getAnswers() {
 		return this.answers;
 	}
@@ -113,5 +113,5 @@ public class User implements Serializable {
 
 	public void removeAnswer(Answer answer) {
 		getAnswers().remove(answer);
-	}
+	}*/
 }

@@ -1,5 +1,7 @@
 package it.polimi.db2.services;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -7,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import it.polimi.db2.entities.Answer;
+import it.polimi.db2.entities.BadWord;
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 
@@ -18,27 +21,39 @@ public class AnswerService {
 	
 	public AnswerService() {}
 	
-	public void reportAnswers(String[] answers, User user_idx, List<Question> questions) {
-		Answer answer = new Answer(answers[0], user_idx, questions.get(0));
+	public void reportAnswer(String answer, User user_idx, Question question) {
+		Answer answ = new Answer(answer, user_idx, question);
 		
-		em.persist(answer);
-		
-		/*
-		for (int i=0; i<answers.length; i++) {
-			Answer answer = new Answer(answers[i], user_idx, questions.get(i));
-			
-			em.persist(answer);
-		}*/
-	}
-	
-	public void reportAnswerS(String[] answers, User user_idx, List<Question> questions) {
-		for (int i=0; i<answers.length; i++) {
-			Answer answer = new Answer();
-			
-			em.persist(answer);
-			answer.setAnswer(answers[i]);
-			answer.setQuestion(questions.get(i));
-			answer.setUser(user_idx);
+		if(question.getQuestion().equals("Expertise level")) {
+			if((!answer.toLowerCase().equals("low") || answer.toLowerCase().equals("medium") || answer.toLowerCase().equals("high"))) {
+				answ.setAnswer("");
+			}
 		}
+		
+		// Questo controllo non funziona
+		boolean numeric = true;
+		if(question.getQuestion().equals("Age")) {
+			try {
+	            int num = Integer.parseInt(answer);
+	        } catch (NumberFormatException e) {
+	            numeric = false;
+	        }
+			
+			if (numeric = false) {
+				answ.setAnswer("");
+			}
+		}
+
+		
+		List<BadWord> badWords = new ArrayList<>();
+		badWords = em.createNamedQuery("BadWord.getAllWords", BadWord.class).getResultList();
+		
+		for (BadWord bad : badWords) {
+			if (answer.toLowerCase().contains(bad.getWord().toLowerCase())){
+				answ.setAnswer("");
+			}
+		}
+		
+		em.persist(answ);
 	}
 }
