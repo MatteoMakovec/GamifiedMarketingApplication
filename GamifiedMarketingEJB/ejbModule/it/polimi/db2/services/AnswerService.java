@@ -25,25 +25,25 @@ public class AnswerService {
 		Answer answ = new Answer(answer, user_idx, question);
 		
 		if(question.getQuestion().equals("Expertise level")) {
-			if((!answer.toLowerCase().equals("low") || answer.toLowerCase().equals("medium") || answer.toLowerCase().equals("high"))) {
+			if(!(answer.toLowerCase().equals("low") || answer.toLowerCase().equals("medium") || answer.toLowerCase().equals("high"))) {
 				answ.setAnswer("");
 			}
 		}
 		
-		// Questo controllo non funziona
-		boolean numeric = true;
-		if(question.getQuestion().equals("Age")) {
-			try {
-	            int num = Integer.parseInt(answer);
-	        } catch (NumberFormatException e) {
-	            numeric = false;
-	        }
-			
-			if (numeric = false) {
+		if(question.getQuestion().equals("Sex")) {
+			if(!(answer.toLowerCase().equals("male") || answer.toLowerCase().equals("female"))) {
 				answ.setAnswer("");
 			}
 		}
-
+		
+		if(question.getQuestion().equals("Age")) {
+		    for(char c : answer.toCharArray()){
+		        if(!(Character.isDigit(c))){
+		        	answ.setAnswer("");
+		        	break;
+		        } 
+		    }
+		}
 		
 		List<BadWord> badWords = new ArrayList<>();
 		badWords = em.createNamedQuery("BadWord.getAllWords", BadWord.class).getResultList();
