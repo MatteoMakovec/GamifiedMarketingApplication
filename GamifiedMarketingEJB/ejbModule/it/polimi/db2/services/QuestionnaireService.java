@@ -63,4 +63,24 @@ public class QuestionnaireService {
 		}
 		
 	}
+	
+	public List<Questionnaire> findQuestionnaires () {
+		List<Questionnaire> questionnaires = new ArrayList<>();
+		
+		questionnaires = em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class)
+				.getResultList();
+		
+		if(questionnaires.isEmpty()) {
+			return null;
+		}
+		else {
+			return questionnaires;
+		}
+	}
+	
+	public void deleteQuestionnaire (int questionnaireID) {
+		Questionnaire questionnaire = em.find(Questionnaire.class, questionnaireID);
+		
+		em.remove(questionnaire);
+	}
 }

@@ -1,6 +1,8 @@
 package it.polimi.db2.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -18,11 +20,11 @@ public class Question implements Serializable {
 	private String question;
 	private String q_type;
 	
-	/*
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<Answer> answers;*/
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	private List<Answer> answers = new ArrayList<>();
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name="questionnaire_idx")
 	private Questionnaire questionnaire_idx;
 
@@ -65,7 +67,7 @@ public class Question implements Serializable {
 	public void setQuestionnaire(Questionnaire questionnaire) {
 		this.questionnaire_idx = questionnaire;
 	}
-	/*
+
 	public List<Answer> getAnswer() {
 		return this.answers;
 	}
@@ -77,5 +79,5 @@ public class Question implements Serializable {
 
 	public void removeAnswer(Answer answer) {
 		getAnswer().remove(answer);
-	}*/
+	}
 }

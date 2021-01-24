@@ -1,8 +1,6 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -18,19 +16,18 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.db2.entities.Question;
-import it.polimi.db2.services.QuestionService;
+import it.polimi.db2.services.QuestionnaireService;
 
 
-@WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends HttpServlet {
+@WebServlet("/DeleteQuestionnaire")
+public class DeleteQuestionnaire extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	
-	@EJB(name = "it.polimi.db2.services/QuestionService")
-	private QuestionService questionService;
+	@EJB(name = "it.polimi.db2.services/QuestionnaireService")
+	private QuestionnaireService questionnaireService;
 
-	public GoToQuestionnairePage() {
+	public DeleteQuestionnaire() {
 		super();
 	}
 
@@ -53,28 +50,24 @@ public class GoToQuestionnairePage extends HttpServlet {
 			return;
 		}
 		
-		int questionnaire;
-		List<Question> questions = new ArrayList<>();
+		int questionnaireID;
 		try {
-			questionnaire = (int) session.getAttribute("questionnaireID");
-			questions = questionService.findQuestions(questionnaire);
+			questionnaireID = Integer.parseInt(request.getParameter("questionnaireID"));
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
 		}
 		
-		int i = 0;
-		for (Question q : questions) {
-			session.setAttribute("question"+i, q);
-			i++;
+		try {
+			questionnaireService.deleteQuestionnaire(questionnaireID);
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
+			return;
 		}
-		session.setAttribute("#question", i+1);
 		
-		String path = "/WEB-INF/questionnaire.html";
+		String path = "/WEB-INF/adminPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("questions", questions);
-		ctx.setVariable("questionnaire", "Questionnaire: "+questionnaire);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

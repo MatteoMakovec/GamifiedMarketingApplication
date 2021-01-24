@@ -12,7 +12,8 @@ import javax.persistence.*;
 @NamedQueries({
 	@NamedQuery(name = "Questionnaire.findDailyQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date"),
 	@NamedQuery(name = "Questionnaire.findQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.ID_questionnaire = :ID_questionnaire"),
-	@NamedQuery(name = "Questionnaire.findQuestionnaireDP", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date AND q.product_idx = :product")
+	@NamedQuery(name = "Questionnaire.findQuestionnaireDP", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date AND q.product_idx = :product"),
+	@NamedQuery(name = "Questionnaire.findAllQuestionnaires", query = "SELECT q FROM Questionnaire q")
 })
 
 
@@ -33,7 +34,8 @@ public class Questionnaire implements Serializable {
 
 	/*
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<User> submitters;*/
+	@JoinTable(name = "phototag", schema = "db2_albums", joinColumns = @JoinColumn(name = "idphoto"), inverseJoinColumns = @JoinColumn(name = "idtag"))
+	private List<User> submitters = new ArrayList<>(); */
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Question> questions = new ArrayList<>();

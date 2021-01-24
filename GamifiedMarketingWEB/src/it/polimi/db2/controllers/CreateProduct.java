@@ -41,7 +41,7 @@ public class CreateProduct extends HttpServlet {
 		byte[] imgByteArray = null;
 		try {
 			productName = StringEscapeUtils.escapeJava(request.getParameter("productName"));
-			imgByteArray = StringEscapeUtils.escapeJava(request.getParameter("imageUpload")).getBytes();
+			imgByteArray = request.getParameter("imageUpload").getBytes();
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;

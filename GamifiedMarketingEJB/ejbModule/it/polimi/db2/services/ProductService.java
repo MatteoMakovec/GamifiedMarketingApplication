@@ -1,5 +1,8 @@
 package it.polimi.db2.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,18 +18,18 @@ public class ProductService {
 	public ProductService() {}
 
 	public Product getProduct(String name){
-		Product product = null;
+		List<Product> products = new ArrayList<>();
 		try {
-			product = em.createNamedQuery("Product.getProduct", Product.class).setParameter("name", name)
-					.getSingleResult();
+			products = em.createNamedQuery("Product.getProduct", Product.class).setParameter("name", name)
+					.getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not get the product");
 		}
 		
-		if (product == null)
+		if (products.isEmpty())
 			return null;
 		else 
-			return product;
+			return products.get(products.size()-1);
 	}
 	
 	public Product getProduct(int ID){

@@ -18,19 +18,19 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.db2.entities.Question;
-import it.polimi.db2.services.QuestionService;
+import it.polimi.db2.entities.Questionnaire;
+import it.polimi.db2.services.QuestionnaireService;
 
 
-@WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends HttpServlet {
+@WebServlet("/DeletionPage")
+public class GoToDeletionPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	
-	@EJB(name = "it.polimi.db2.services/QuestionService")
-	private QuestionService questionService;
-
-	public GoToQuestionnairePage() {
+	@EJB(name = "it.polimi.db2.services/QuestionnaireService")
+	private QuestionnaireService questionnaireService;
+	
+	public GoToDeletionPage() {
 		super();
 	}
 
@@ -53,28 +53,18 @@ public class GoToQuestionnairePage extends HttpServlet {
 			return;
 		}
 		
-		int questionnaire;
-		List<Question> questions = new ArrayList<>();
+		List<Questionnaire> questionnaires = new ArrayList<>();
 		try {
-			questionnaire = (int) session.getAttribute("questionnaireID");
-			questions = questionService.findQuestions(questionnaire);
+			questionnaires = questionnaireService.findQuestionnaires();
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
 		
-		int i = 0;
-		for (Question q : questions) {
-			session.setAttribute("question"+i, q);
-			i++;
-		}
-		session.setAttribute("#question", i+1);
-		
-		String path = "/WEB-INF/questionnaire.html";
+		String path = "/WEB-INF/deletionPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("questions", questions);
-		ctx.setVariable("questionnaire", "Questionnaire: "+questionnaire);
+		ctx.setVariable("questionnaires", questionnaires);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
