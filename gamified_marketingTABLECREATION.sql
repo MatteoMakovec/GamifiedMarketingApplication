@@ -13,7 +13,7 @@ CREATE TABLE Usertable(
 	passwd varchar(50) NOT NULL,
 	email varchar(50) DEFAULT NULL,
 	last_login varchar(20) DEFAULT NULL,
-    user_type varchar(6) DEFAULT 'Normal' CHECK (user_type IN ('Normal', 'Admin'))
+    user_type varchar(7) DEFAULT 'Normal' CHECK (user_type IN ('Normal', 'Admin', 'Blocked'))
 );
 
 INSERT INTO Usertable (ID, username, passwd, email)
@@ -109,4 +109,4 @@ BEGIN
 	INSERT INTO Question (question, q_type, questionnaire_idx) VALUES ('Expertise level', 'Statistical', new.ID_questionnaire);
 END$$
 
-DELIMITER ;
+
