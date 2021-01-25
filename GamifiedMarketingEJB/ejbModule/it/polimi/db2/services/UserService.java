@@ -8,6 +8,7 @@ import javax.persistence.NonUniqueResultException;
 
 import it.polimi.db2.entities.User;
 import it.polimi.db2.exceptions.*;
+
 import java.util.List;
 
 @Stateless
@@ -40,11 +41,11 @@ public class UserService {
 		em.persist(user);
 	}
 	
-	public void updateTimestamp(User u) throws Exception {
+	public void updateUser(User u) throws Exception {
 		try {
 			em.merge(u);
 		} catch (Exception e) {
-			throw new Exception("Could not change profile");
+			throw new Exception("Could not update timestamp");
 		}
 	}
 }

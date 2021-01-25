@@ -20,7 +20,10 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
+import it.polimi.db2.exceptions.BadWordException;
+import it.polimi.db2.exceptions.QuestionException;
 import it.polimi.db2.services.AnswerService;
+import it.polimi.db2.services.UserService;
 
 
 @WebServlet("/SubmitAnswers")
@@ -30,6 +33,9 @@ public class SubmitAnswers extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.services/AnswerService")
 	private AnswerService answerService;
+	
+	@EJB(name = "it.polimi.db2.services/UserService")
+	private UserService userService;
 	
 	public SubmitAnswers() {
 		super();
@@ -63,8 +69,27 @@ public class SubmitAnswers extends HttpServlet {
 		
 		
 		if ((questions!=null)&&(answers!=null)) {
-			for (int i=0; i<answers.length; i++) {
-				answerService.reportAnswer(answers[i], user, questions.get(i));
+			try {
+				for (int i=0; i<answers.length; i++) {
+					answerService.reportAnswer(answers[i], user, questions.get(i));
+				}
+
+			} catch (QuestionException e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				return;
+			} catch (BadWordException e) {
+				user.setType("Blocked");
+				try {
+					userService.updateUser(user);
+				} catch (Exception e1) {
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e1.getMessage());
+					return;
+				}
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				return;
+			} catch (Exception e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				return;
 			}
 		}
 		

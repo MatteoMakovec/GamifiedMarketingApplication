@@ -1,5 +1,6 @@
 package it.polimi.db2.services;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,11 @@ public class QuestionnaireService {
 	public void deleteQuestionnaire (int questionnaireID) {
 		Questionnaire questionnaire = em.find(Questionnaire.class, questionnaireID);
 		
-		em.remove(questionnaire);
+		Date systemDate = new java.sql.Date(System.currentTimeMillis());
+		Date date = Date.valueOf(questionnaire.getDate());
+		
+		if(date.compareTo(systemDate) < 0) {
+			em.remove(questionnaire);
+	    }
 	}
 }
