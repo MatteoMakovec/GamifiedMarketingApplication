@@ -110,3 +110,33 @@ BEGIN
 END$$
 
 
+-- To fix!
+-- the problem is "new.question_idx.questionnaire_idx"
+CREATE TRIGGER UpdateLeaderboard
+AFTER INSERT ON `Answer`
+FOR EACH ROW
+BEGIN
+	IF EXISTS (SELECT * FROM Leaderboard WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx)) THEN 
+			IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Statistical") THEN
+				UPDATE Leaderboard
+				SET points = points + 2
+				WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+            END IF;
+            
+            IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Marketing") THEN
+				UPDATE Leaderboard
+				SET points = points + 1
+				WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+            END IF;
+	ELSE
+			IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Statistical") THEN
+				INSERT INTO Leaderboard VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 2);
+			END IF;
+            
+            IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Marketing") THEN
+				INSERT INTO Leaderboard VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 1);
+			END IF;
+	END IF;
+END$$
+
+DELIMITER ;
