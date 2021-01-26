@@ -9,7 +9,7 @@ USE gamified_marketing;
 -- Usertable -- 
 CREATE TABLE Usertable(
 	ID int PRIMARY KEY auto_increment,
-	username varchar(25) NOT NULL,
+	username varchar(25) NOT NULL UNIQUE,
 	passwd varchar(50) NOT NULL,
 	email varchar(50) DEFAULT NULL,
 	last_login varchar(20) DEFAULT NULL,
@@ -87,12 +87,10 @@ VALUES ('badword3');
 -- ------------------------------------------------------------------------ --
 -- Leaderboard -- 
 CREATE TABLE Leaderboard(
-	ID int,
-	questionnaire int,
-    points int,
-    PRIMARY KEY (ID, questionnaire),
-    FOREIGN KEY (ID) REFERENCES Usertable (ID),
-    FOREIGN KEY (questionnaire) REFERENCES Questionnaire (ID_questionnaire)
+	ID_leaderboard int PRIMARY KEY auto_increment,
+	user_ID int,
+	questionnaire_ID int,
+    points int
 );
 
 
@@ -110,33 +108,47 @@ BEGIN
 END$$
 
 
--- To fix!
--- the problem is "new.question_idx.questionnaire_idx"
 CREATE TRIGGER UpdateLeaderboard
 AFTER INSERT ON `Answer`
 FOR EACH ROW
 BEGIN
-	IF EXISTS (SELECT * FROM Leaderboard WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx)) THEN 
+	IF EXISTS (SELECT * FROM Leaderboard WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx)) THEN 
 			IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Statistical") THEN
-				UPDATE Leaderboard
-				SET points = points + 2
-				WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
+					UPDATE Leaderboard
+					SET points = points + 2
+					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+				END IF;
             END IF;
             
             IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Marketing") THEN
-				UPDATE Leaderboard
-				SET points = points + 1
-				WHERE ID = new.user_idx AND questionnaire = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
+					UPDATE Leaderboard
+					SET points = points + 1
+					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+				END IF;
             END IF;
 	ELSE
 			IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Statistical") THEN
-				INSERT INTO Leaderboard VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 2);
+				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
+					INSERT INTO Leaderboard (user_ID, questionnaire_ID, points) VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 2);
+				END IF;
 			END IF;
             
             IF ((SELECT q_type FROM Question WHERE ID_question = new.question_idx) = "Marketing") THEN
-				INSERT INTO Leaderboard VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 1);
+				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
+					INSERT INTO Leaderboard  (user_ID, questionnaire_ID, points) VALUES (new.user_idx, (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx), 1);
+				END IF;
 			END IF;
 	END IF;
+END$$
+
+
+CREATE TRIGGER DeleteLeaderboard
+AFTER DELETE ON `Questionnaire`
+FOR EACH ROW
+BEGIN
+	DELETE FROM Leaderboard WHERE questionnaire_ID = old.ID_questionnaire;
 END$$
 
 DELIMITER ;
