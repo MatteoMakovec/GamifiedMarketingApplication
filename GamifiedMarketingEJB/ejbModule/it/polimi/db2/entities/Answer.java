@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Answer", schema = "gamified_marketing")
+@NamedQuery(name="Answer.getAnswers", query="SELECT a FROM Answer a WHERE a.user_idx = :user AND a.question_idx.questionnaire_idx = :questionnaire")
 public class Answer implements Serializable {
 	private static final long serialVersionUID = 1L;
 

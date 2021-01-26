@@ -7,6 +7,7 @@
 		transaction-type="JTA">
 		<class>it.polimi.db2.entities.Answer</class>
 		<class>it.polimi.db2.entities.BadWord</class>
+		<class>it.polimi.db2.entities.Leaderboard</class>
 		<class>it.polimi.db2.entities.Product</class>
 		<class>it.polimi.db2.entities.Question</class>
 		<class>it.polimi.db2.entities.Questionnaire</class>

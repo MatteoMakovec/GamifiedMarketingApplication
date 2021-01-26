@@ -6,6 +6,21 @@
 	</head>
 	<body>
 		<h1>Inspection view of the selected questionnaire</h1>
-		<p th:text="${string}">
+		
+		<p>List of users that submitted the questionnaire:</p>
+		<table>
+			<thead>
+				<tr>
+					<th>User ID</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="u : ${users}">
+					<td th:text="${u.getID}"></td>
+					<td th:text="${u.getUsername}"></td>
+				</tr>
+			</tbody>
+		</table><br><br>
 	</body>
 </html>

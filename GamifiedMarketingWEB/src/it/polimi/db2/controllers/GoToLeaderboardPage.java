@@ -13,30 +13,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.openjpa.jdbc.sql.Select;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Leaderboard;
-import it.polimi.db2.entities.User;
 import it.polimi.db2.services.LeaderboardService;
-import it.polimi.db2.services.QuestionnaireService;
 
-@WebServlet("/InspectQuestionnaire")
-public class InspectQuestionnaire extends HttpServlet {
+
+@WebServlet("/LeaderboardPage")
+public class GoToLeaderboardPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	
-	@EJB(name = "it.polimi.db2.mission.services/QuestionnaireService")
-	private QuestionnaireService questionnaireService;
-	
-	@EJB(name = "it.polimi.db2.mission.services/LeaderboardService")
+	@EJB(name = "it.polimi.db2.services/LeaderboardService")
 	private LeaderboardService leaderboardService;
-
 	
-	public InspectQuestionnaire() {
+	public GoToLeaderboardPage() {
 		super();
 	}
 
@@ -49,48 +43,38 @@ public class InspectQuestionnaire extends HttpServlet {
 		templateResolver.setSuffix(".html");
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		String loginpath = getServletContext().getContextPath() + "/index.html";
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
-			String loginpath = getServletContext().getContextPath() + "/index.html";
 			response.sendRedirect(loginpath);
 			return;
 		}
 		
-		int ID_questionnaire;
+		int questionnaire = (int) session.getAttribute("questionnaireID");
+		List<Leaderboard> leaderboards = new ArrayList<>();
 		try {
-			ID_questionnaire = Integer.parseInt(request.getParameter("questionnaireID"));
+			leaderboards = leaderboardService.getLeaderboards(questionnaire);
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
+        
 		
-		// List of users whose submitted the questionnaire
-		List<User> users = new ArrayList<>();
-		try {
-			users = leaderboardService.getUsers(ID_questionnaire);
-		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			return;
-		}
-		
-		
-		// List of users whose canceled the questionnaire
-		
-		
-		
-		// Questionnaire answers of each user
-		// TODO: Use the query of Answer "SELECT a FROM Answer a WHERE a.question_idx.questionnaire_idx = :questionnaire"
-		
-		
-		
-		String path = "/WEB-INF/questionnaireView.html";
+		String path = "/WEB-INF/leaderboardPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("users", users);
+		ctx.setVariable("questionnaire", questionnaire);
+		ctx.setVariable("leaderboards", leaderboards);
 
 		templateEngine.process(path, ctx, response.getWriter());
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
 	}
 
 	public void destroy() {}

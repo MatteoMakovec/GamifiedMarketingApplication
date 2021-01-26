@@ -29,9 +29,11 @@ public class GoToHomePage extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.services/QuestionnaireService")
 	private QuestionnaireService questionnaireService;
+	
 	@EJB(name = "it.polimi.db2.services/ProductService")
 	private ProductService productService;
-
+	
+	
 	public GoToHomePage() {
 		super();
 	}

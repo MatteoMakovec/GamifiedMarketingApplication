@@ -33,12 +33,12 @@ public class Questionnaire implements Serializable {
 	private Product product_idx;
 	
 
-/*	
+/*
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
 	@JoinTable(	name = "", schema = "gamified_marketing", joinColumns = @JoinColumn(name = "ID_questionnaire"), inverseJoinColumns = @JoinColumn(name = "ID"))
 	private List<User> submitters = new ArrayList<>(); */
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
 
 
