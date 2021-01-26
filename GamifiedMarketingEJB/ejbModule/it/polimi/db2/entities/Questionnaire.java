@@ -31,10 +31,11 @@ public class Questionnaire implements Serializable {
 	@OneToOne
 	@JoinColumn(name="product_idx")
 	private Product product_idx;
+	
 
-	/*
+/*	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	@JoinTable(name = "phototag", schema = "db2_albums", joinColumns = @JoinColumn(name = "idphoto"), inverseJoinColumns = @JoinColumn(name = "idtag"))
+	@JoinTable(	name = "", schema = "gamified_marketing", joinColumns = @JoinColumn(name = "ID_questionnaire"), inverseJoinColumns = @JoinColumn(name = "ID"))
 	private List<User> submitters = new ArrayList<>(); */
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })

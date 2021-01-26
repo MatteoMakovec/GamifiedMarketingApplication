@@ -73,7 +73,6 @@ public class SubmitAnswers extends HttpServlet {
 				for (int i=0; i<answers.length; i++) {
 					answerService.reportAnswer(answers[i], user, questions.get(i));
 				}
-
 			} catch (QuestionException e) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				return;
