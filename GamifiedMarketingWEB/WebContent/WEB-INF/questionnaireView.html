@@ -7,7 +7,7 @@
 	<body>
 		<h1>Inspection view of the selected questionnaire</h1>
 		
-		<p>List of users that submitted the questionnaire:</p>
+		<h6>List of users that submitted the questionnaire:</h6>
 		<table>
 			<thead>
 				<tr>
@@ -19,6 +19,24 @@
 				<tr th:each="u : ${users}">
 					<td th:text="${u.getID}"></td>
 					<td th:text="${u.getUsername}"></td>
+				</tr>
+			</tbody>
+		</table><br><br>
+		
+		<h6>List of users that submitted the questionnaire:</h6>
+		<table  th:each="answs : ${answers}">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Question</th>
+					<th>Answer</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="a : ${answs}">
+					<td th:text="${a.getUser().getUsername()}"></td>
+					<td th:text="${a.getQuestion().getQuestion()}"></td>
+					<td th:text="${a.getAnswer()}"></td>
 				</tr>
 			</tbody>
 		</table><br><br>

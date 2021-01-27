@@ -19,6 +19,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Leaderboard;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.services.LeaderboardService;
@@ -82,13 +83,17 @@ public class InspectQuestionnaire extends HttpServlet {
 		
 		// Questionnaire answers of each user
 		// TODO: Use the query of Answer "SELECT a FROM Answer a WHERE a.question_idx.questionnaire_idx = :questionnaire"
-		
+		List<List<Answer>> answers = new ArrayList<>();
+		for (User u : users) {
+			answers.add(u.getAnswers());
+		}
 		
 		
 		String path = "/WEB-INF/questionnaireView.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("users", users);
+		ctx.setVariable("answers", answers);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}

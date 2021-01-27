@@ -1,6 +1,7 @@
 package it.polimi.db2.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class User implements Serializable {
 	
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	private List<Answer> answers;
+	private List<Answer> answers = new ArrayList<>();
 	
 
 	public User() {}
