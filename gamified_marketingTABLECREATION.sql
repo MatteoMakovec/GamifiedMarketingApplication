@@ -41,7 +41,7 @@ CREATE TABLE Questionnaire(
 	ID_questionnaire int PRIMARY KEY auto_increment,
     q_date varchar(10) NOT NULL,
     product_idx int,
-    FOREIGN KEY (product_idx) REFERENCES Product (ID_product)
+    FOREIGN KEY (product_idx) REFERENCES Product (ID_product) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -52,7 +52,7 @@ CREATE TABLE Question(
     question varchar(200) NOT NULL,
     q_type varchar(11) CHECK (q_type IN ('Statistical', 'Marketing')) NOT NULL,
     questionnaire_idx int,
-    FOREIGN KEY (questionnaire_idx) REFERENCES Questionnaire (ID_questionnaire) ON UPDATE CASCADE
+    FOREIGN KEY (questionnaire_idx) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -63,8 +63,8 @@ CREATE TABLE Answer(
 	answer varchar(250) NOT NULL,
 	user_idx int NOT NULL,
     question_idx int NOT NULL,
-    FOREIGN KEY (user_idx) REFERENCES Usertable (ID),
-    FOREIGN KEY (question_idx) REFERENCES Question (ID_question)
+    FOREIGN KEY (user_idx) REFERENCES Usertable (ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (question_idx) REFERENCES Question (ID_question) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
