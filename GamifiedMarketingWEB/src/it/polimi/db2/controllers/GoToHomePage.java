@@ -88,7 +88,5 @@ public class GoToHomePage extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public void destroy() {
-	}
-
+	public void destroy() {}
 }

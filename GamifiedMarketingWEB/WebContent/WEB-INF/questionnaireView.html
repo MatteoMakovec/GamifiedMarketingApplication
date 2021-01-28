@@ -7,7 +7,7 @@
 	<body>
 		<h1>Inspection view of the selected questionnaire</h1>
 		
-		<h6>List of users that submitted the questionnaire:</h6>
+		<h3>List of users that submitted the questionnaire:</h3>
 		<table>
 			<thead>
 				<tr>
@@ -23,7 +23,7 @@
 			</tbody>
 		</table><br><br>
 		
-		<h6>List of the answers given by the users for the selected questionnaire:</h6>
+		<h3>List of the answers given by the users for the selected questionnaire:</h3>
 		<table  th:each="answs : ${answers}">
 			<thead>
 				<tr>
@@ -37,6 +37,22 @@
 					<td th:text="${a.getUser().getUsername()}"></td>
 					<td th:text="${a.getQuestion().getQuestion()}"></td>
 					<td th:text="${a.getAnswer()}"></td>
+				</tr>
+			</tbody>
+		</table><br><br>
+		
+		<h3>List of users that cancelled the questionnaire:</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>User ID</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="us : ${usersCanc}">
+					<td th:text="${us.getID}"></td>
+					<td th:text="${us.getUsername}"></td>
 				</tr>
 			</tbody>
 		</table><br><br>

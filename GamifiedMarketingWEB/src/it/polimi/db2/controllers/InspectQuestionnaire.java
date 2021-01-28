@@ -13,17 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.openjpa.jdbc.sql.Select;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Answer;
-import it.polimi.db2.entities.Leaderboard;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.services.LeaderboardService;
 import it.polimi.db2.services.QuestionnaireService;
+
 
 @WebServlet("/InspectQuestionnaire")
 public class InspectQuestionnaire extends HttpServlet {
@@ -78,11 +77,16 @@ public class InspectQuestionnaire extends HttpServlet {
 		
 		
 		// List of users whose canceled the questionnaire
-		
+		List<User> us = new ArrayList<>();
+		try {
+			us = leaderboardService.getUsersCancelled(ID_questionnaire);
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			return;
+		}
 		
 		
 		// Questionnaire answers of each user
-		// TODO: Use the query of Answer "SELECT a FROM Answer a WHERE a.question_idx.questionnaire_idx = :questionnaire"
 		List<List<Answer>> answers = new ArrayList<>();
 		for (User u : users) {
 			answers.add(u.getAnswers());
@@ -94,6 +98,7 @@ public class InspectQuestionnaire extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("users", users);
 		ctx.setVariable("answers", answers);
+		ctx.setVariable("usersCanc", us);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}

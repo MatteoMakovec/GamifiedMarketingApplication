@@ -51,4 +51,28 @@ public class LeaderboardService {
 		
 		return users;
 	}
+	
+	public List<User> getUsersCancelled(int questionnaireID){
+		List<Leaderboard> leaderboards = new ArrayList<>();
+		List<User> users = new ArrayList<>();
+		
+		try {
+			leaderboards = em.createNamedQuery("Leaderboard.findCancel", Leaderboard.class).setParameter("questionnaire", questionnaireID)
+					.getResultList();
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Could not get the leaderboard");
+		}
+		
+		for (Leaderboard l : leaderboards) {
+			users.add(em.find(User.class, l.getUser()));
+		}
+		
+		return users;
+	}
+	
+	public void userCancels(int user, int questionnaire) {
+		Leaderboard leaderboard = new Leaderboard(user, questionnaire);
+		
+		em.merge(leaderboard);
+	}
 }

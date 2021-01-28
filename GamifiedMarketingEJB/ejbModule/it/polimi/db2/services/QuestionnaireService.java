@@ -22,19 +22,19 @@ public class QuestionnaireService {
 	}
 
 	public Questionnaire findDailyQuestionnaire(String date) {
-		Questionnaire questionnaire = null;
+		List<Questionnaire> questionnaires = null;
 		
 		try {
-			questionnaire = em.createNamedQuery("Questionnaire.findDailyQuestionnaire", Questionnaire.class).setParameter("date", date)
-					.getSingleResult();
+			questionnaires = em.createNamedQuery("Questionnaire.findDailyQuestionnaire", Questionnaire.class).setParameter("date", date)
+					.getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not find the daily questionnaire");
 		}
 		
-		if (questionnaire == null)
+		if (questionnaires.isEmpty())
 			return null;
 		else 
-			return questionnaire;
+			return questionnaires.get(questionnaires.size()-1);
 	}
 	
 	public void createQuestionnaire(String q_date, int productID, String[] questions){
