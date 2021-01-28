@@ -1,8 +1,6 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -18,7 +16,6 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.db2.entities.Question;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.exceptions.BadWordException;
 import it.polimi.db2.exceptions.QuestionException;
@@ -30,9 +27,6 @@ import it.polimi.db2.services.UserService;
 public class SubmitAnswers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
-	
-	@EJB(name = "it.polimi.db2.services/AnswerService")
-	private AnswerService answerService;
 	
 	@EJB(name = "it.polimi.db2.services/UserService")
 	private UserService userService;
@@ -62,34 +56,26 @@ public class SubmitAnswers extends HttpServlet {
 		String[] answers = request.getParameterValues("answer");
 		User user = (User) session.getAttribute("user");
 		
-		List<Question> questions = new ArrayList<>();
-		for (int i=0; i<(int)session.getAttribute("#question"); i++) {
-			questions.add((Question) session.getAttribute("question"+i));
-		}
+		AnswerService answerService = (AnswerService) request.getSession().getAttribute("AnswerService");
 		
-		
-		if ((questions!=null)&&(answers!=null)) {
+		try {
+			answerService.reportAnswers(answers, user);
+		} catch (QuestionException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			return;
+		} catch (BadWordException e) {
+			user.setType("Blocked");
 			try {
-				for (int i=0; i<answers.length; i++) {
-					answerService.reportAnswer(answers[i], user, questions.get(i));
-				}
-			} catch (QuestionException e) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-				return;
-			} catch (BadWordException e) {
-				user.setType("Blocked");
-				try {
-					userService.updateUser(user);
-				} catch (Exception e1) {
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e1.getMessage());
-					return;
-				}
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-				return;
-			} catch (Exception e) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				userService.updateUser(user);
+			} catch (Exception e1) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e1.getMessage());
 				return;
 			}
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			return;
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			return;
 		}
 		
 		

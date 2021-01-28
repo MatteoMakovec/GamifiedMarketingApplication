@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.db2.entities.User;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.UserService;
 
@@ -43,7 +44,9 @@ public class Subscribe extends HttpServlet {
 			return;
 		}
 		
-		userService.createUser(username, passwd, email);
+		User user = userService.createUser(username, passwd, email);
+		
+		request.getSession().setAttribute("user", user);
 		String path = getServletContext().getContextPath() + "/Home";
 		response.sendRedirect(path);
 	}

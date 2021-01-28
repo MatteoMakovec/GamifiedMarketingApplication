@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Question;
+import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.QuestionService;
 
 
@@ -63,12 +65,16 @@ public class GoToQuestionnairePage extends HttpServlet {
 			return;
 		}
 		
-		int i = 0;
-		for (Question q : questions) {
-			session.setAttribute("question"+i, q);
-			i++;
+		AnswerService answerService = null;
+		try {
+			InitialContext ic = new InitialContext();
+			answerService = (AnswerService) ic.lookup("java:/openejb/local/AnswerServiceLocalBean");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		session.setAttribute("#question", i+1);
+		
+		answerService.setQuestions(questions);
+		request.getSession().setAttribute("AnswerService", answerService);
 		
 		String path = "/WEB-INF/questionnaire.html";
 		ServletContext servletContext = getServletContext();

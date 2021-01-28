@@ -15,6 +15,8 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.db2.entities.User;
+
 
 @WebServlet("/CreationPage")
 public class GoToCreationPage extends HttpServlet {
@@ -43,7 +45,11 @@ public class GoToCreationPage extends HttpServlet {
 			response.sendRedirect(loginpath);
 			return;
 		}
-
+		if ((!((User) session.getAttribute("user")).getType().equals("Admin"))) {
+			response.sendRedirect(loginpath);
+			return;
+		}
+		
 		String path = "/WEB-INF/creationPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());

@@ -65,12 +65,13 @@ public class SubmitQuestions extends HttpServlet {
 		try {
 			questionnaireDate = StringEscapeUtils.escapeJava(request.getParameter("questionnaireDate"));
 			productID = Integer.parseInt(request.getParameter("productID"));
-			/*Date systemDate = new java.sql.Date(System.currentTimeMillis());
+			Date systemDate = new java.sql.Date(System.currentTimeMillis());
 			Date date = Date.valueOf(questionnaireDate);
-			if(date.compareTo(systemDate) < 0) {
+			
+			if(date.compareTo(systemDate) > 0) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You can only create questionnaires for a future date");
 				return;
-		    }*/
+		    }
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
@@ -89,7 +90,5 @@ public class SubmitQuestions extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public void destroy() {
-	}
-
+	public void destroy() {}
 }

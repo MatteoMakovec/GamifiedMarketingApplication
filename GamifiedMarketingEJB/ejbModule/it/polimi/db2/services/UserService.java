@@ -35,10 +35,12 @@ public class UserService {
 
 	}
 	
-	public void createUser(String username, String password, String email) {
+	public User createUser(String username, String password, String email) {
 		User user = new User(username, password, email);
 		
 		em.persist(user);
+		
+		return user;
 	}
 	
 	public void updateUser(User u) throws Exception {

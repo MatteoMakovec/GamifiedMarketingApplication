@@ -18,6 +18,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Questionnaire;
+import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionnaireService;
 
@@ -32,6 +33,9 @@ public class GoToHomePage extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.services/ProductService")
 	private ProductService productService;
+	
+	@EJB(name = "it.polimi.db2.services/AnswerService")
+	private AnswerService answerService;
 	
 	
 	public GoToHomePage() {
