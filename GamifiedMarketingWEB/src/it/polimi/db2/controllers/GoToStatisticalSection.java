@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,22 +19,27 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Question;
+import it.polimi.db2.entities.User;
 import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.QuestionService;
+import it.polimi.db2.services.UserService;
 
 
-@WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends HttpServlet {
+@WebServlet("/StatisticalSection")
+public class GoToStatisticalSection extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	
+	@EJB(name = "it.polimi.db2.services/UserService")
+	private UserService userService;
+	
 	@EJB(name = "it.polimi.db2.services/QuestionService")
 	private QuestionService questionService;
-
-	public GoToQuestionnairePage() {
+	
+	public GoToStatisticalSection() {
 		super();
 	}
-
+	
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -47,7 +51,6 @@ public class GoToQuestionnairePage extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 		String loginpath = getServletContext().getContextPath() + "/index.html";
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
@@ -55,28 +58,25 @@ public class GoToQuestionnairePage extends HttpServlet {
 			return;
 		}
 		
+		String[] answers = request.getParameterValues("answer");
+		User user = (User) session.getAttribute("user");
+		
+		AnswerService answerService = (AnswerService) request.getSession().getAttribute("AnswerService");
+		answerService.addAnswers(answers, user);
+		
 		int questionnaire;
 		List<Question> questions = new ArrayList<>();
 		try {
 			questionnaire = (int) session.getAttribute("questionnaireID");
-			questions = questionService.findMarketingQuestions(questionnaire);
+			questions = questionService.findStatisticalQuestions(questionnaire);
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
 		
-		AnswerService answerService = null;
-		try {
-			InitialContext ic = new InitialContext();
-			answerService = (AnswerService) ic.lookup("java:/openejb/local/AnswerServiceLocalBean");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 		answerService.setQuestions(questions);
-		request.getSession().setAttribute("AnswerService", answerService);
 		
-		String path = "/WEB-INF/questionnaire.html";
+		String path = "/WEB-INF/statisticalSection.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("questions", questions);

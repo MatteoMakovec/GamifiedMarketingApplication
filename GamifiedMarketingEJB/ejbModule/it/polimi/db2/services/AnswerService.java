@@ -23,29 +23,28 @@ public class AnswerService {
 	private EntityManager em;
 	
 	private List<Question> questions = new ArrayList<>();
+	private List<Answer> answers = new ArrayList<>();
 	
 	
 	public AnswerService() {}
 	
-	public void reportAnswers(String[] answers, User user_idx) throws QuestionException, BadWordException {
-		for (int i=0; i<answers.length; i++) {
-			Answer answ = new Answer(answers[i], user_idx, questions.get(i));
-		
+	public void reportAnswers(User user_idx) throws QuestionException, BadWordException {
+		for (int i=0; i<answers.size(); i++) {
 		    if(questions.get(i).getQuestion().equals("Expertise level")) {
-				if(!(answers[i].toLowerCase().equals("low") || answers[i].toLowerCase().equals("medium") || answers[i].toLowerCase().equals("high") || answers[i].toLowerCase().equals(""))) {
+				if(!(answers.get(i).getAnswer().toLowerCase().equals("low") || answers.get(i).getAnswer().toLowerCase().equals("medium") || answers.get(i).getAnswer().toLowerCase().equals("high") || answers.get(i).getAnswer().toLowerCase().equals(""))) {
 					throw new QuestionException("Malformed answer: the expertise level has to be 'Low', 'Medium' or 'High'");
 				}
 			}
 			
 			if(questions.get(i).getQuestion().equals("Sex")) {
-				if(!(answers[i].toLowerCase().equals("male") || answers[i].toLowerCase().equals("female") || answers[i].toLowerCase().equals(""))) {
+				if(!(answers.get(i).getAnswer().toLowerCase().equals("male") || answers.get(i).getAnswer().toLowerCase().equals("female") || answers.get(i).getAnswer().toLowerCase().equals(""))) {
 					throw new QuestionException("Malformed answer: the sex has to be 'Male' ore 'Female'");
 				}
 			}
 			
 			if(questions.get(i).getQuestion().equals("Age")) {
-				if (!(answers[i].toLowerCase().equals(""))) {
-				    for(char c : answers[i].toCharArray()){
+				if (!(answers.get(i).getAnswer().toLowerCase().equals(""))) {
+				    for(char c : answers.get(i).getAnswer().toCharArray()){
 				        if(!(Character.isDigit(c))){
 				        	throw new QuestionException("Malformed answer: the age has to be a number");
 				        } 
@@ -54,7 +53,7 @@ public class AnswerService {
 			}
 			
 			if(questions.get(i).getType().equals("Marketing")) {
-				if(answers[i].toLowerCase().equals("")) {
+				if(answers.get(i).getAnswer().toLowerCase().equals("")) {
 					throw new QuestionException("Malformed answer: marketing questions have to be replied");
 				}
 			}
@@ -63,17 +62,26 @@ public class AnswerService {
 			badWords = em.createNamedQuery("BadWord.getAllWords", BadWord.class).getResultList();
 			
 			for (BadWord bad : badWords) {
-				if (answers[i].toLowerCase().contains(bad.getWord().toLowerCase())){
+				if (answers.get(i).getAnswer().toLowerCase().contains(bad.getWord().toLowerCase())){
 					throw new BadWordException("You can't use bad words in your answers");
 				}
 			}
 			
-			em.merge(answ);
+			em.merge(answers.get(i));
 		}
 	}
 	
 	public void setQuestions(List<Question> qs) {
-		this.questions = qs;
+		for (Question q : qs) {
+			questions.add(q);
+		}
+	}
+	
+	public void addAnswers(String[] answs, User user) {
+		for (int i=0; i<answs.length; i++) {
+			Answer answ = new Answer(answs[i], user, questions.get(answers.size()));
+			answers.add(answ);
+		}
 	}
 	
 	@Remove

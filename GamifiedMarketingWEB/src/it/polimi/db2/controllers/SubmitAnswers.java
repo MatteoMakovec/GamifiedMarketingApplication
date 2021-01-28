@@ -58,8 +58,10 @@ public class SubmitAnswers extends HttpServlet {
 		
 		AnswerService answerService = (AnswerService) request.getSession().getAttribute("AnswerService");
 		
+		answerService.addAnswers(answers, user);
+		
 		try {
-			answerService.reportAnswers(answers, user);
+			answerService.reportAnswers(user);
 		} catch (QuestionException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			return;

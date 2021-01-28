@@ -18,11 +18,26 @@ public class QuestionService {
 	public QuestionService() {
 	}
 	
-	public List<Question> findQuestions(int ID_questionnaire) {
+	public List<Question> findMarketingQuestions(int ID_questionnaire) {
 		List<Question> questions = null;
 		
 		try {
-			questions = em.createNamedQuery("Question.findQuestions", Question.class).setParameter("ID", ID_questionnaire).getResultList();
+			questions = em.createNamedQuery("Question.findQuestions", Question.class).setParameter("ID", ID_questionnaire).setParameter("type", "Marketing").getResultList();
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Could not find the questions for this questionnaire");
+		}
+		
+		if (questions.isEmpty())
+			return null;
+		else 
+			return questions;
+	}
+	
+	public List<Question> findStatisticalQuestions(int ID_questionnaire) {
+		List<Question> questions = null;
+		
+		try {
+			questions = em.createNamedQuery("Question.findQuestions", Question.class).setParameter("ID", ID_questionnaire).setParameter("type", "Statistical").getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not find the questions for this questionnaire");
 		}
