@@ -1,6 +1,8 @@
 package it.polimi.db2.entities;
 
 import java.io.Serializable;
+import java.util.Base64;
+
 import javax.persistence.*;
 
 
@@ -22,11 +24,11 @@ public class Product implements Serializable {
 	private String p_name;
 
 	@Basic(fetch=FetchType.LAZY)
-	private byte[] image = new byte[4096];
+	@Lob
+	private byte[] image;
 	
 
-	public Product() {
-	}
+	public Product() {}
 	
 	public Product(String name) {
 		p_name = name;
@@ -53,8 +55,8 @@ public class Product implements Serializable {
 		this.p_name = name;
 	}
 
-	public byte[] getImage() {
-		return this.image;
+	public String getImage() {
+		return Base64.getMimeEncoder().encodeToString(image);
 	}
 
 	public void setImage(byte[] image) {

@@ -7,7 +7,7 @@ public class ImageUtils {
 	public static byte[] readImage(InputStream imageInputStream) throws IOException {
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		byte[] buffer = new byte[4096];// image can be maximum of 4MB
+		byte[] buffer = new byte[4096];
 		int bytesRead = -1;
 
 		try {

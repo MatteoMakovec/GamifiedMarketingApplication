@@ -55,7 +55,9 @@ public class ProductService {
 	
 	
 	public void createProduct(String name, byte[] image){
-		Product product = new Product(name, image);
+		Product product = new Product();
+		product.setName(name);
+		product.setImage(image);
 		
 		em.persist(product);
 	}

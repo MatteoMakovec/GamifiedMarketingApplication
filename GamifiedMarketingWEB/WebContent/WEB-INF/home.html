@@ -7,7 +7,7 @@
 	<body>
 		<h1>Gamified Marketing Home Page</h1>
 		<h3>Daily questionnaire</h3>
-		<p>Image: </p><img alt="productPhoto" th:src="*{'product:image/png;base64,'}"><br><br>
+		<p>Image: </p><img width="100px" th:src="@{'data:image/png;base64,' + ${product.getImage()}}" /><br><br>
 		<p>Name: <p th:text="${product.name}"></p><br><br>
 		<form action="Questionnaire" method="POST">
 			Questionnaire: <label id="questionnaire" th:text="${questionnaire}"></label>
