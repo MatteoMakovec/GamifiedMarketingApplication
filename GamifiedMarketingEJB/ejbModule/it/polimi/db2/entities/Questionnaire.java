@@ -28,15 +28,10 @@ public class Questionnaire implements Serializable {
 	private String q_date;
 	
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="product_idx")
 	private Product product_idx;
 	
-
-/*
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
-	@JoinTable(	name = "", schema = "gamified_marketing", joinColumns = @JoinColumn(name = "ID_questionnaire"), inverseJoinColumns = @JoinColumn(name = "ID"))
-	private List<User> submitters = new ArrayList<>(); */
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
@@ -73,19 +68,7 @@ public class Questionnaire implements Serializable {
 	public void setProduct(Product product) {
 		this.product_idx = product;
 	}
-/*
-	public List<User> getSubmitters() {
-		return this.submitters;
-	}
-
-	public void add(User submitter) {
-		getSubmitters().add(submitter);
-	}
-
-	public void removeSubmitter(User submitter) {
-		getSubmitters().remove(submitter);
-	}
-*/
+	
 	public List<Question> getQuestions() {
 		return this.questions;
 	}

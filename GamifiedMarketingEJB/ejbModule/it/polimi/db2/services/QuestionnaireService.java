@@ -37,7 +37,7 @@ public class QuestionnaireService {
 			return questionnaires.get(questionnaires.size()-1);
 	}
 	
-	public void createQuestionnaire(String q_date, int productID, String[] questions){
+	public void createQuestionnaire(String q_date, int productID, String[] questions) {
 		Product product = em.find(Product.class, productID);
 		Questionnaire questionnaire = new Questionnaire(q_date, product);
 		

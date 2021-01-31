@@ -16,8 +16,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="l : ${leaderboards}">
-					<td th:text="${l.getUser}"></td>
-					<td th:text="${l.getPoints}"></td>
+					<td th:text="${l.getUser().getUsername()}"></td>
+					<td th:text="${l.getPoints()}"></td>
 				</tr>
 			</tbody>
 		</table>

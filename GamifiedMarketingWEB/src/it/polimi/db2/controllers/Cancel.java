@@ -53,7 +53,7 @@ public class Cancel extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		int questionnaire = (int) session.getAttribute("questionnaireID");
 		
-		leaderboardService.userCancels(user.getID(), questionnaire);
+		leaderboardService.userCancels(user, questionnaire);
 
 		String path = "/WEB-INF/greetingsPage.html";
 		ServletContext servletContext = getServletContext();
