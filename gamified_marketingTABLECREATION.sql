@@ -41,7 +41,7 @@ CREATE TABLE Questionnaire(
 	ID_questionnaire int PRIMARY KEY auto_increment,
     q_date varchar(10) NOT NULL,
     product_idx int,
-    FOREIGN KEY (product_idx) REFERENCES Product (ID_product) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (product_idx) REFERENCES Product (ID_product) ON DELETE CASCADE
 );
 
 
@@ -52,7 +52,7 @@ CREATE TABLE Question(
     question varchar(200) NOT NULL,
     q_type varchar(11) CHECK (q_type IN ('Statistical', 'Marketing')) NOT NULL,
     questionnaire_idx int,
-    FOREIGN KEY (questionnaire_idx) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (questionnaire_idx) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE
 );
 
 
@@ -64,7 +64,7 @@ CREATE TABLE Answer(
 	user_idx int NOT NULL,
     question_idx int NOT NULL,
     FOREIGN KEY (user_idx) REFERENCES Usertable (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (question_idx) REFERENCES Question (ID_question) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (question_idx) REFERENCES Question (ID_question) ON DELETE CASCADE
 );
 
 
@@ -90,7 +90,9 @@ CREATE TABLE Leaderboard(
 	ID_leaderboard int PRIMARY KEY auto_increment,
 	user_ID int,
 	questionnaire_ID int,
-    points int
+    points int,
+    FOREIGN KEY (questionnaire_ID) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE,
+    FOREIGN KEY (user_ID) REFERENCES Usertable (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -141,14 +143,6 @@ BEGIN
 				END IF;
 			END IF;
 	END IF;
-END$$
-
-
-CREATE TRIGGER DeleteLeaderboard
-AFTER DELETE ON `Questionnaire`
-FOR EACH ROW
-BEGIN
-	DELETE FROM Leaderboard WHERE questionnaire_ID = old.ID_questionnaire;
 END$$
 
 DELIMITER ;
