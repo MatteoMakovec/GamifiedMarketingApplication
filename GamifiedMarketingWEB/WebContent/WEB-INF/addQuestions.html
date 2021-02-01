@@ -7,23 +7,21 @@
 	<body>
 		<h1>Add questions to the questionnaire</h1>
 		<form action="SubmitQuestions" method="POST">	
-		Questionnaire date: <input type="text" id="questionnaireDate" name="questionnaireDate"><br>
-		Product ID: <input type="text" id="productID" name="productID"><br>
-				<table>
-					<thead>
-						<tr>
-							<th>  </th>
-							<th>Question</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="n : ${numberOfQuestions}">
-							<td><p>Insert question: </p></td>
-							<td><input type="text" id="question" name="question" value=""><br></td>
-						</tr>
-					</tbody>
-				</table>
-				<input type="submit" value="Submit Questionnaire" id="submitQuestionnaire" name="submitQuestionnaire">
-			</form>
+			<table>
+				<thead>
+					<tr>
+						<th>  </th>
+						<th>Question</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="n : ${numberOfQuestions}">
+						<td><p>Insert question: </p></td>
+						<td><input type="text" id="question" name="question" value=""><br></td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="submit" value="Submit Questionnaire" id="submitQuestionnaire" name="submitQuestionnaire">
+		</form>
 	</body>
 </html>

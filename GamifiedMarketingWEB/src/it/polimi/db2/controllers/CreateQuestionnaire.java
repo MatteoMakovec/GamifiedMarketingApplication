@@ -1,8 +1,10 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -13,12 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.services.ProductService;
+import it.polimi.db2.services.QuestionnaireCreationService;
 import it.polimi.db2.services.QuestionnaireService;
 
 @WebServlet("/CreateQuestionnaire")
@@ -56,22 +60,42 @@ public class CreateQuestionnaire extends HttpServlet {
 		}
 		
 		int numberOfQuestions;
+		String questionnaireDate = null;
 		try {
 			numberOfQuestions = Integer.parseInt(request.getParameter("numberOfQuestions"));
+			questionnaireDate = StringEscapeUtils.escapeJava(request.getParameter("questionnaireDate"));
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
 		}
 		
-		List<String> s = new ArrayList<>();			// Trovare un modo più elegante per farlo
-		for (int i=0; i<numberOfQuestions; i++) {
-			s.add("q");
-		}
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date(System.currentTimeMillis());
+		String system = formatter.format(date);
+
+        try {
+            Date qDate = (Date) new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN)
+                    .parse(questionnaireDate);
+            Date systemDate = (Date) new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN)
+                    .parse(system);
+
+            if (qDate.compareTo(systemDate) < 0) {
+            	response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You can only create questionnaires for a current or a future date");
+    			return;
+            } 
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+		
+		QuestionnaireCreationService qcs = (QuestionnaireCreationService) session.getAttribute("QuestionnaireCreationService");
+		qcs.addQuestionnaireDate(questionnaireDate);
+		
+		String[] qwe = new String[numberOfQuestions];
 		
 		String path = "/WEB-INF/addQuestions.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("numberOfQuestions", s);
+		ctx.setVariable("numberOfQuestions", qwe);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}

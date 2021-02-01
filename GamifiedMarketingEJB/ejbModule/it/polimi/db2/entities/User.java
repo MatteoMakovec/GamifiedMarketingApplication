@@ -27,9 +27,7 @@ public class User implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
 	private List<Answer> answers = new ArrayList<>();
-	/*
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_ID", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
-	private List<Leaderboard> leaderboards = new ArrayList<>();*/
+	
 
 	public User() {}
 	
@@ -100,17 +98,4 @@ public class User implements Serializable {
 	public void removeAnswer(Answer answer) {
 		getAnswers().remove(answer);
 	}
-	/*
-	public List<Leaderboard> getLeaderboards() {
-		return this.leaderboards;
-	}
-
-	public void addLeaderboard(Leaderboard leaderboard) {
-		getLeaderboards().add(leaderboard);
-		leaderboard.setUser(this);
-	}
-
-	public void removeLeaderboard(Leaderboard leaderboard) {
-		getLeaderboards().remove(leaderboard);
-	}*/
 }

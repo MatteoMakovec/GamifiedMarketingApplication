@@ -1,7 +1,6 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
-import java.sql.Date;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -20,6 +18,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionService;
+import it.polimi.db2.services.QuestionnaireCreationService;
 import it.polimi.db2.services.QuestionnaireService;
 
 
@@ -59,25 +58,16 @@ public class SubmitQuestions extends HttpServlet {
 			return;
 		}
 		
-		String questionnaireDate = null;
-		int productID;
-		String[] questions = request.getParameterValues("question");
+		String[] questions;
 		try {
-			questionnaireDate = StringEscapeUtils.escapeJava(request.getParameter("questionnaireDate"));
-			productID = Integer.parseInt(request.getParameter("productID"));
-			Date systemDate = new java.sql.Date(System.currentTimeMillis());
-			Date date = Date.valueOf(questionnaireDate);
-			/*
-			if(date.compareTo(systemDate) < 0) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You can only create questionnaires for a future date");
-				return;
-		    }*/
+			questions = request.getParameterValues("question");
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
 		}
 		
-		questionnaireService.createQuestionnaire(questionnaireDate, productID, questions);
+		QuestionnaireCreationService qcs = (QuestionnaireCreationService) session.getAttribute("QuestionnaireCreationService");
+		qcs.createQuestionnaire(questions);
 		
 		String path = "/WEB-INF/adminPage.html";
 		ServletContext servletContext = getServletContext();

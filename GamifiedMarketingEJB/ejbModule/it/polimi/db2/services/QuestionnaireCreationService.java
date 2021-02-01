@@ -16,15 +16,16 @@ public class QuestionnaireCreationService {
 	@PersistenceContext(unitName = "GamifiedMarketingApplication", type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
 	
-	private Product p;
+	private Product product;
+	private String questionnaireDate;
 	
 	public QuestionnaireCreationService() {}
 	
-	public void createQuestionnaire(String q_date, int productID, String[] questions) {
-		Product product = em.find(Product.class, productID);
-		Questionnaire questionnaire = new Questionnaire(q_date, product);
-		
+	public void createQuestionnaire(String[] questions) {
+		Questionnaire questionnaire = new Questionnaire(questionnaireDate);
 		em.persist(questionnaire);
+		
+		questionnaire.setProduct(product);
 		
 		for (int i=0; i<questions.length; i++) {
 			Question q = new Question(questions[i], questionnaire);
@@ -33,7 +34,11 @@ public class QuestionnaireCreationService {
 	}
 	
 	public void addProduct(String productName, byte[] image) {
-		this.p = new Product (productName, image);
+		this.product = new Product (productName, image);
+	}
+	
+	public void addQuestionnaireDate(String date) {
+		this.questionnaireDate = date;
 	}
 	
 	@Remove

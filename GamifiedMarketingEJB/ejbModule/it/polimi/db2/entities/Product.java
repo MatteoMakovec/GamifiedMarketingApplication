@@ -19,7 +19,7 @@ public class Product implements Serializable {
 	
 	private String p_name;
 
-	@Basic(fetch=FetchType.LAZY)
+	@Basic(fetch=FetchType.EAGER)
 	@Lob
 	private byte[] image;
 	

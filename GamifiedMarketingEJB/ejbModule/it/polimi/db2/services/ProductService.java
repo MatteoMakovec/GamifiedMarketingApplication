@@ -31,12 +31,4 @@ public class ProductService {
 		else 
 			return products.get(products.size()-1);
 	}
-	
-	public void createProduct(String name, byte[] image) {
-		Product product = new Product();
-		product.setName(name);
-		product.setImage(image);
-		
-		em.persist(product);
-	}
 }

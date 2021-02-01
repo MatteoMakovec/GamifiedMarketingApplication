@@ -51,7 +51,7 @@ public class GoToCreationPage extends HttpServlet {
 			response.sendRedirect(loginpath);
 			return;
 		}
-		/*
+		
 		QuestionnaireCreationService questionnaireCreationService = null;
 		try {
 			InitialContext ic = new InitialContext();
@@ -60,7 +60,7 @@ public class GoToCreationPage extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		request.getSession().setAttribute("QuestionnaireCreationService", questionnaireCreationService);*/
+		request.getSession().setAttribute("QuestionnaireCreationService", questionnaireCreationService);
 		
 		
 		String path = "/WEB-INF/creationPage.html";

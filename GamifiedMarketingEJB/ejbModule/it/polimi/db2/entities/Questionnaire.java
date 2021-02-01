@@ -34,12 +34,13 @@ public class Questionnaire implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
-	
-	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_ID", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
-	private List<Leaderboard> leaderboards = new ArrayList<>();*/
 
 
 	public Questionnaire() {
+	}
+	
+	public Questionnaire(String date) {
+		q_date = date;
 	}
 	
 	public Questionnaire(String date, Product product) {
@@ -83,17 +84,4 @@ public class Questionnaire implements Serializable {
 	public void removeQuestion(Question question) {
 		getQuestions().remove(question);
 	}
-	/*
-	public List<Leaderboard> getLeaderboards() {
-		return this.leaderboards;
-	}
-
-	public void addLeaderboard(Leaderboard leaderboard) {
-		getLeaderboards().add(leaderboard);
-		leaderboard.setQuestionnaire(this);
-	}
-
-	public void removeLeaderboard(Leaderboard leaderboard) {
-		getLeaderboards().remove(leaderboard);
-	}*/
 }

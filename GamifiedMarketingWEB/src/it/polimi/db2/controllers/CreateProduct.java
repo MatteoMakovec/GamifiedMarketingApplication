@@ -73,15 +73,14 @@ public class CreateProduct extends HttpServlet {
 		}
 
 		try {
-			//QuestionnaireCreationService qcs = (QuestionnaireCreationService) session.getAttribute("QuestionnaireCreationService");
-			//qcs.addProduct(productName, imgByteArray);
-			productService.createProduct(productName, imgByteArray);
+			QuestionnaireCreationService qcs = (QuestionnaireCreationService) session.getAttribute("QuestionnaireCreationService");
+			qcs.addProduct(productName, imgByteArray);
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
 			return;
 		}
 		
-		String path = "/WEB-INF/numberOfQuestions.html";
+		String path = "/WEB-INF/questionnaireInfo.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		templateEngine.process(path, ctx, response.getWriter());
