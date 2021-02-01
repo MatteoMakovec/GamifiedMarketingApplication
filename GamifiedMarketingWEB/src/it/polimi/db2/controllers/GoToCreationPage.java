@@ -2,6 +2,7 @@ package it.polimi.db2.controllers;
 
 import java.io.IOException;
 
+import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.User;
+import it.polimi.db2.services.QuestionnaireCreationService;
 
 
 @WebServlet("/CreationPage")
@@ -49,6 +51,17 @@ public class GoToCreationPage extends HttpServlet {
 			response.sendRedirect(loginpath);
 			return;
 		}
+		/*
+		QuestionnaireCreationService questionnaireCreationService = null;
+		try {
+			InitialContext ic = new InitialContext();
+			questionnaireCreationService = (QuestionnaireCreationService) ic.lookup("java:/openejb/local/QuestionnaireCreationServiceLocalBean");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		request.getSession().setAttribute("QuestionnaireCreationService", questionnaireCreationService);*/
+		
 		
 		String path = "/WEB-INF/creationPage.html";
 		ServletContext servletContext = getServletContext();

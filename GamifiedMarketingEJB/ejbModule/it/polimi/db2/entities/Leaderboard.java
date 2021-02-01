@@ -21,11 +21,11 @@ public class Leaderboard implements Serializable {
 	
 	private int points;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="user_ID")
 	private User user_ID;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="questionnaire_ID")
 	private Questionnaire questionnaire_ID;
 	

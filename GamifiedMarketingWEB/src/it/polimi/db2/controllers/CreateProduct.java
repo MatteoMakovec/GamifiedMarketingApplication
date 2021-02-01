@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.ejb.EJB;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -14,14 +15,21 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.services.ProductService;
+import it.polimi.db2.services.QuestionnaireCreationService;
 import it.polimi.db2.utils.*;
 
 @WebServlet("/CreateProduct")
 @MultipartConfig
 public class CreateProduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private TemplateEngine templateEngine;
+	
 	@EJB(name = "it.polimi.db2.mission.services/ProductService")
 	private ProductService productService;
 
@@ -31,6 +39,12 @@ public class CreateProduct extends HttpServlet {
 	}
 
 	public void init() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		this.templateEngine = new TemplateEngine();
+		this.templateEngine.setTemplateResolver(templateResolver);
+		templateResolver.setSuffix(".html");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,15 +73,18 @@ public class CreateProduct extends HttpServlet {
 		}
 
 		try {
+			//QuestionnaireCreationService qcs = (QuestionnaireCreationService) session.getAttribute("QuestionnaireCreationService");
+			//qcs.addProduct(productName, imgByteArray);
 			productService.createProduct(productName, imgByteArray);
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
 			return;
 		}
-
-		String ctxpath = getServletContext().getContextPath();
-		String path = ctxpath + "/AdminPage";
-		response.sendRedirect(path);
+		
+		String path = "/WEB-INF/numberOfQuestions.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		templateEngine.process(path, ctx, response.getWriter());
 	}
 
 	public void destroy() {}

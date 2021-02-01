@@ -20,6 +20,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.Question;
+import it.polimi.db2.entities.User;
 import it.polimi.db2.services.AnswerService;
 import it.polimi.db2.services.QuestionService;
 
@@ -52,6 +53,12 @@ public class GoToQuestionnairePage extends HttpServlet {
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
 			response.sendRedirect(loginpath);
+			return;
+		}
+		
+		User user = (User) session.getAttribute("user");
+		if (user.getType().equals("Blocked")) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Your account is blocked, you can no longer answer any questionnaire");
 			return;
 		}
 		

@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "Questionnaire", schema = "gamified_marketing")
 @NamedQueries({
 	@NamedQuery(name = "Questionnaire.findDailyQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date"),
-	@NamedQuery(name = "Questionnaire.findQuestionnaire", query = "SELECT q FROM Questionnaire q  WHERE q.ID_questionnaire = :ID_questionnaire"),
 	@NamedQuery(name = "Questionnaire.findQuestionnaireDP", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date AND q.product_idx = :product"),
 	@NamedQuery(name = "Questionnaire.findAllQuestionnaires", query = "SELECT q FROM Questionnaire q")
 })
@@ -28,13 +27,16 @@ public class Questionnaire implements Serializable {
 	private String q_date;
 	
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
 	@JoinColumn(name="product_idx")
 	private Product product_idx;
 	
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
+	
+	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_ID", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
+	private List<Leaderboard> leaderboards = new ArrayList<>();*/
 
 
 	public Questionnaire() {
@@ -81,4 +83,17 @@ public class Questionnaire implements Serializable {
 	public void removeQuestion(Question question) {
 		getQuestions().remove(question);
 	}
+	/*
+	public List<Leaderboard> getLeaderboards() {
+		return this.leaderboards;
+	}
+
+	public void addLeaderboard(Leaderboard leaderboard) {
+		getLeaderboards().add(leaderboard);
+		leaderboard.setQuestionnaire(this);
+	}
+
+	public void removeLeaderboard(Leaderboard leaderboard) {
+		getLeaderboards().remove(leaderboard);
+	}*/
 }

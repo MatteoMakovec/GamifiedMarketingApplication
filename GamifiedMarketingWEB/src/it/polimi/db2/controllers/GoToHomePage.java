@@ -1,6 +1,8 @@
 package it.polimi.db2.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -16,9 +18,11 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.Product;
 import it.polimi.db2.entities.Questionnaire;
-import it.polimi.db2.services.AnswerService;
+import it.polimi.db2.entities.User;
+import it.polimi.db2.services.LeaderboardService;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionnaireService;
 
@@ -34,9 +38,8 @@ public class GoToHomePage extends HttpServlet {
 	@EJB(name = "it.polimi.db2.services/ProductService")
 	private ProductService productService;
 	
-	@EJB(name = "it.polimi.db2.services/AnswerService")
-	private AnswerService answerService;
-	
+	@EJB(name = "it.polimi.db2.mission.services/LeaderboardService")
+	private LeaderboardService leaderboardService;
 	
 	public GoToHomePage() {
 		super();
@@ -61,17 +64,24 @@ public class GoToHomePage extends HttpServlet {
 			return;
 		}
 		
+		List<User> users = new ArrayList<>();
 		Questionnaire questionnaire = null;
 		Product product = null;
 		try {
 			String date = new java.sql.Date(System.currentTimeMillis()).toString(); 
 			questionnaire = questionnaireService.findDailyQuestionnaire(date);
 			product = productService.getProduct(questionnaire.getProduct().getName());
+			users = leaderboardService.getUsers(questionnaire.getID());
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
         
+		List<List<Answer>> answers = new ArrayList<>();
+		for (User u : users) {
+			answers.add(u.getAnswers());
+		}
+		
 		session.setAttribute("questionnaireID", questionnaire.getID());
 		
 		String path = "/WEB-INF/home.html";
@@ -79,6 +89,7 @@ public class GoToHomePage extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("product", product);
 		ctx.setVariable("questionnaire", questionnaire.getID());
+		ctx.setVariable("reviews", answers);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}

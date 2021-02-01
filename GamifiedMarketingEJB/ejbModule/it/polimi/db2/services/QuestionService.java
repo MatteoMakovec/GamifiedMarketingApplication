@@ -51,6 +51,6 @@ public class QuestionService {
 	public void submitQuestion(String quest, Questionnaire questionnaire) {
 		Question question = new Question(quest, questionnaire);
 		
-		em.persist(question);
+		em.merge(question);
 	}
 }

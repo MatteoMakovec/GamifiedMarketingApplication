@@ -67,11 +67,11 @@ public class SubmitQuestions extends HttpServlet {
 			productID = Integer.parseInt(request.getParameter("productID"));
 			Date systemDate = new java.sql.Date(System.currentTimeMillis());
 			Date date = Date.valueOf(questionnaireDate);
-			
-			if(date.compareTo(systemDate) > 0) {
+			/*
+			if(date.compareTo(systemDate) < 0) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You can only create questionnaires for a future date");
 				return;
-		    }
+		    }*/
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;

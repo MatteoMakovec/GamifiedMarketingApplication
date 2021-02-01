@@ -25,7 +25,7 @@ public class LeaderboardService {
 		
 		try {
 			leaderboards = em.createNamedQuery("Leaderboard.findLeaderboard", Leaderboard.class).setParameter("questionnaire", quest)
-					.getResultList();
+					.setHint("javax.persistence.cache.storeMode", "REFRESH").getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not get the leaderboard");
 		}
@@ -41,16 +41,17 @@ public class LeaderboardService {
 		List<User> users = new ArrayList<>();
 		
 		Questionnaire quest = em.find(Questionnaire.class, questionnaireID);
-		
 		try {
 			leaderboards = em.createNamedQuery("Leaderboard.findLeaderboard", Leaderboard.class).setParameter("questionnaire", quest)
-					.getResultList();
+					.setHint("javax.persistence.cache.storeMode", "REFRESH").getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not get the leaderboard");
 		}
 		
 		for (Leaderboard l : leaderboards) {
-			users.add(l.getUser());
+			User u = l.getUser();
+			if (!users.contains(u))
+				users.add(l.getUser());
 		}
 		
 		return users;
@@ -64,7 +65,7 @@ public class LeaderboardService {
 		
 		try {
 			leaderboards = em.createNamedQuery("Leaderboard.findCancel", Leaderboard.class).setParameter("questionnaire", quest)
-					.getResultList();
+					.setHint("javax.persistence.cache.storeMode", "REFRESH").getResultList();
 		} catch (PersistenceException e) {
 			throw new PersistenceException("Could not get the leaderboard");
 		}

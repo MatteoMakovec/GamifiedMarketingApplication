@@ -60,10 +60,6 @@ public class CheckLogin extends HttpServlet {
 			out.println("<p>Incorrect username or password</p>");
 		} 
 		else {
-			if (user.getType().equals("Blocked")) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Your account is blocked");
-				return;
-			}
 			request.getSession().setAttribute("user", user);
 			Date date = new Date(); 
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
