@@ -25,7 +25,7 @@ public class User implements Serializable {
 	private String user_type;
 	
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
 	private List<Answer> answers = new ArrayList<>();
 	
 

@@ -33,7 +33,7 @@ public class Questionnaire implements Serializable {
 	private Product product_idx;
 	
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
 
 

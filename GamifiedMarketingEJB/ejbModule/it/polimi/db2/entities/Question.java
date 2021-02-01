@@ -21,10 +21,10 @@ public class Question implements Serializable {
 	private String q_type;
 	
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question_idx", cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Answer> answers = new ArrayList<>();
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="questionnaire_idx")
 	private Questionnaire questionnaire_idx;
 

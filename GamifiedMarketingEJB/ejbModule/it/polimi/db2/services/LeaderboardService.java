@@ -70,7 +70,9 @@ public class LeaderboardService {
 		}
 		
 		for (Leaderboard l : leaderboards) {
-			users.add(l.getUser());
+			User u = l.getUser();
+			if (!users.contains(u))
+				users.add(u);
 		}
 		
 		return users;

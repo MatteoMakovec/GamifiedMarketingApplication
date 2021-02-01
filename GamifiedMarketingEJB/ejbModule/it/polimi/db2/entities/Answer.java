@@ -18,11 +18,11 @@ public class Answer implements Serializable {
 	@Column(name="answer")
 	private String answ;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_idx")
 	private User user_idx;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_idx")
 	private Question question_idx;
 	

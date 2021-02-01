@@ -54,7 +54,6 @@ public class CreateProduct extends HttpServlet {
 		Part imgFile = request.getPart("imageUpload");
 		InputStream imgContent = imgFile.getInputStream();
 		imgByteArray = ImageUtils.readImage(imgContent);
-		//imgByteArray = request.getParameter("imageUpload").getBytes();
 		if (imgByteArray.length == 0) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid photo parameters");
 		}
