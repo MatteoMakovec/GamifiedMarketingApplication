@@ -91,7 +91,7 @@ CREATE TABLE Leaderboard(
 	user_ID int,
 	questionnaire_ID int,
     points int,
-    FOREIGN KEY (questionnaire_ID) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE,
+    FOREIGN KEY (questionnaire_ID) REFERENCES Questionnaire (ID_questionnaire) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (user_ID) REFERENCES Usertable (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
