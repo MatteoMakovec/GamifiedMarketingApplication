@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "Leaderboard", schema = "gamified_marketing")
 @NamedQueries({
 	@NamedQuery(name = "Leaderboard.findLeaderboard", query = "SELECT l FROM Leaderboard l  WHERE l.questionnaire_ID = :questionnaire AND l.points <> 0 ORDER BY l.points DESC"),
+	@NamedQuery(name = "Leaderboard.findUserCancel", query = "SELECT l FROM Leaderboard l  WHERE l.questionnaire_ID = :questionnaire AND l.user_ID = :user AND l.points = 0"),
 	@NamedQuery(name = "Leaderboard.findCancel", query = "SELECT l FROM Leaderboard l  WHERE l.questionnaire_ID = :questionnaire AND l.points = 0"),
 })
 public class Leaderboard implements Serializable {

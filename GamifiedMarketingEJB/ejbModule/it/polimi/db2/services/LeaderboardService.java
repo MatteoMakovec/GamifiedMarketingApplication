@@ -51,6 +51,7 @@ public class LeaderboardService {
 		for (Leaderboard l : leaderboards) {
 			User u = l.getUser();
 			if (!users.contains(u))
+				em.refresh(u);
 				users.add(l.getUser());
 		}
 		
@@ -81,8 +82,14 @@ public class LeaderboardService {
 	
 	public void userCancels(User user, int questionnaire) {
 		Questionnaire quest = em.find(Questionnaire.class, questionnaire);
-		Leaderboard leaderboard = new Leaderboard(user, quest);
+		Leaderboard leaderboard;
 		
-		em.merge(leaderboard);
+		try {
+			leaderboard = em.createNamedQuery("Leaderboard.findUserCancel", Leaderboard.class).setParameter("questionnaire", quest).setParameter("user", user)
+					.setHint("javax.persistence.cache.storeMode", "REFRESH").getSingleResult();
+		} catch (PersistenceException e) {
+			leaderboard = new Leaderboard(user, quest);
+			em.merge(leaderboard);	
+		}
 	}
 }
