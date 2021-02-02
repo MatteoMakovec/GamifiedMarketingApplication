@@ -21,6 +21,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionnaireCreationService;
 import it.polimi.db2.services.QuestionnaireService;
@@ -53,8 +54,12 @@ public class CreateQuestionnaire extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		String loginpath = getServletContext().getContextPath() + "/index.html";
 		if (session.isNew() || session.getAttribute("user") == null) {
-			String loginpath = getServletContext().getContextPath() + "/index.html";
+			response.sendRedirect(loginpath);
+			return;
+		}
+		if ((!((User) session.getAttribute("user")).getType().equals("Admin"))) {
 			response.sendRedirect(loginpath);
 			return;
 		}

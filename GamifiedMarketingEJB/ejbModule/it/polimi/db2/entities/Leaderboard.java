@@ -22,11 +22,11 @@ public class Leaderboard implements Serializable {
 	
 	private int points;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_ID")
 	private User user_ID;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="questionnaire_ID")
 	private Questionnaire questionnaire_ID;
 	

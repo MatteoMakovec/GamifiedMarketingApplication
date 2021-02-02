@@ -16,6 +16,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.db2.entities.User;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionService;
 import it.polimi.db2.services.QuestionnaireCreationService;
@@ -54,6 +55,10 @@ public class SubmitQuestions extends HttpServlet {
 		String loginpath = getServletContext().getContextPath() + "/index.html";
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
+			response.sendRedirect(loginpath);
+			return;
+		}
+		if ((!((User) session.getAttribute("user")).getType().equals("Admin"))) {
 			response.sendRedirect(loginpath);
 			return;
 		}

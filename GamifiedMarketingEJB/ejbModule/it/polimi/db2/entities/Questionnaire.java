@@ -14,8 +14,6 @@ import javax.persistence.*;
 	@NamedQuery(name = "Questionnaire.findQuestionnaireDP", query = "SELECT q FROM Questionnaire q  WHERE q.q_date = :date AND q.product_idx = :product"),
 	@NamedQuery(name = "Questionnaire.findAllQuestionnaires", query = "SELECT q FROM Questionnaire q")
 })
-
-
 public class Questionnaire implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +25,7 @@ public class Questionnaire implements Serializable {
 	private String q_date;
 	
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	@JoinColumn(name="product_idx")
 	private Product product_idx;
 	

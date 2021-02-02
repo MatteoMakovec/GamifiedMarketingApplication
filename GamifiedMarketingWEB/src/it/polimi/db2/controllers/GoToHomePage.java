@@ -25,6 +25,7 @@ import it.polimi.db2.entities.User;
 import it.polimi.db2.services.LeaderboardService;
 import it.polimi.db2.services.ProductService;
 import it.polimi.db2.services.QuestionnaireService;
+import it.polimi.db2.services.UserService;
 
 
 @WebServlet("/Home")
@@ -40,6 +41,9 @@ public class GoToHomePage extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.mission.services/LeaderboardService")
 	private LeaderboardService leaderboardService;
+	
+	@EJB(name = "it.polimi.db2.mission.services/UserService")
+	private UserService userService;
 	
 	public GoToHomePage() {
 		super();
@@ -79,7 +83,7 @@ public class GoToHomePage extends HttpServlet {
         
 		List<List<Answer>> answers = new ArrayList<>();
 		for (User u : users) {
-			answers.add(u.getAnswers());
+			answers.add(userService.getAnswers(u, questionnaire.getID()));
 		}
 		
 		session.setAttribute("questionnaireID", questionnaire.getID());

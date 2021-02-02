@@ -22,6 +22,7 @@ import it.polimi.db2.entities.Answer;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.services.LeaderboardService;
 import it.polimi.db2.services.QuestionnaireService;
+import it.polimi.db2.services.UserService;
 
 
 @WebServlet("/InspectQuestionnaire")
@@ -31,6 +32,9 @@ public class InspectQuestionnaire extends HttpServlet {
 	
 	@EJB(name = "it.polimi.db2.mission.services/QuestionnaireService")
 	private QuestionnaireService questionnaireService;
+	
+	@EJB(name = "it.polimi.db2.mission.services/UserService")
+	private UserService userService;
 	
 	@EJB(name = "it.polimi.db2.mission.services/LeaderboardService")
 	private LeaderboardService leaderboardService;
@@ -52,8 +56,12 @@ public class InspectQuestionnaire extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		String loginpath = getServletContext().getContextPath() + "/index.html";
 		if (session.isNew() || session.getAttribute("user") == null) {
-			String loginpath = getServletContext().getContextPath() + "/index.html";
+			response.sendRedirect(loginpath);
+			return;
+		}
+		if ((!((User) session.getAttribute("user")).getType().equals("Admin"))) {
 			response.sendRedirect(loginpath);
 			return;
 		}
@@ -89,7 +97,7 @@ public class InspectQuestionnaire extends HttpServlet {
 		// Questionnaire answers of each user
 		List<List<Answer>> answers = new ArrayList<>();
 		for (User u : users) {
-			answers.add(u.getAnswers());
+			answers.add(userService.getAnswers(u, ID_questionnaire));
 		}
 		
 		

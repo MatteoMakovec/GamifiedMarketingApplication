@@ -6,9 +6,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.NonUniqueResultException;
 
+import it.polimi.db2.entities.Answer;
+import it.polimi.db2.entities.Questionnaire;
 import it.polimi.db2.entities.User;
 import it.polimi.db2.exceptions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -49,5 +52,18 @@ public class UserService {
 		} catch (Exception e) {
 			throw new Exception("Could not update timestamp");
 		}
+	}
+	
+	public List<Answer> getAnswers(User user, int questionnaire) {
+		List<Answer> answerList = new ArrayList<>();
+		Questionnaire quest = em.find(Questionnaire.class, questionnaire);
+		try {
+			answerList = em.createNamedQuery("User.getAnswers", Answer.class).setParameter("user", user).setParameter("questionnaire", quest)
+					.getResultList();
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Could not get the user answers");
+		}
+		
+		return answerList;
 	}
 }

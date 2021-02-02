@@ -9,7 +9,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Usertable", schema = "gamified_marketing")
-@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = :username and r.passwd = :password")
+@NamedQueries({
+	@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = :username and r.passwd = :password"),
+	@NamedQuery(name="User.getAnswers", query="SELECT a FROM Answer a WHERE a.user_idx = :user AND a.question_idx.questionnaire_idx = :questionnaire")
+})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
