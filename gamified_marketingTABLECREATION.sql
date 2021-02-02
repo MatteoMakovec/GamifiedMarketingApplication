@@ -119,7 +119,7 @@ BEGIN
 				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
 					UPDATE Leaderboard
 					SET points = points + 2
-					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx) AND points <> 0;
 				END IF;
             END IF;
             
@@ -127,7 +127,7 @@ BEGIN
 				IF ((SELECT answer FROM Answer WHERE ID_answer = new.ID_answer) <> "") THEN
 					UPDATE Leaderboard
 					SET points = points + 1
-					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx);
+					WHERE user_ID = new.user_idx AND questionnaire_ID = (SELECT questionnaire_idx FROM Question WHERE ID_question = new.question_idx) AND points <> 0;
 				END IF;
             END IF;
 	ELSE
