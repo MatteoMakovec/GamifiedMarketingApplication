@@ -15,5 +15,9 @@ The user can access a LEADERBOARD page, which shows a list of the usernames and 
 
 The administrator can access a dedicated application on the same database, which features the following pages: 
 A CREATION page for inserting the product of the day for the current date or for a posterior date and for creating a variable number of marketing questions about such product. 
-An INSPECTION page for accessing the data of a past questionnaire. The visualized data for a given questionnaire include: - List of users who submitted the questionnaire- List of users who cancelled the questionnaire - Questionnaire answers of each user. 
+An INSPECTION page for accessing the data of a past questionnaire. 
+The visualized data for a given questionnaire include: 
+- List of users who submitted the questionnaire
+- List of users who cancelled the questionnaire
+- Questionnaire answers of each user. 
 A DELETION page for ERASING the questionnaire data and the related responses and points of all users who filled in the questionnaire. Deletion should be possible only for a date preceding the current date. 
