@@ -7,7 +7,9 @@ The HOME PAGE displays the name and the image of the “product of the day” an
 After successfully submitting the questionnaire, the user is routed to a page with a thanks and greetings message.
 
 The database contains a table of offensive words. If any response of the user contains a word listed in the table, the transaction is rolled back, no data are recorded in the database, and the user’s account is blocked so that no questionnaires can be filled in by such account in the future. 
-When the user submits the questionnaire one or more trigger compute the gamification points to assign to the user for the specific questionnaire, according to the following rule:  - One point is assigned for every answered question of section 1 (remember that the number of questions can vary in different questionnaires). - Two points are assigned for every answered optional question of section 2. 
+When the user submits the questionnaire one or more trigger compute the gamification points to assign to the user for the specific questionnaire, according to the following rule:  
+- One point is assigned for every answered question of section 1 (remember that the number of questions can vary in different questionnaires).
+- Two points are assigned for every answered optional question of section 2. 
 When the user cancels the questionnaire, no responses are stored in the database. However, the database retains the information that the user X has logged in at a given date and time. 
 The user can access a LEADERBOARD page, which shows a list of the usernames and points of all the users who filled in the questionnaire of the day, ordered by the number of points (descending). 
 
